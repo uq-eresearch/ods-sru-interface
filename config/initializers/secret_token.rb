@@ -4,4 +4,30 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-OdsSruInterface::Application.config.secret_token = '203a2f9771cf0b7c290d563aaefb0c105122210fec3299fbd526f35e6e75d3232e336b9718f91775c9d9d825f4136e8d19c11983abcee06a7efd7f3743ab19f5'
+
+def get_random_bytes(n = 256)
+  # Get some random bytes from Random.org
+  require 'random/online'
+  generator = RealRand::RandomOrg.new
+  begin
+    # If testing, allow a net connection just this once
+    WebMock.allow_net_connect! if defined? WebMock
+    # Get the random bytes
+    return generator.randbyte(number = n)
+  ensure
+    # If testing, disallow net connections again
+    WebMock.disable_net_connect! if defined? WebMock
+  end
+end
+
+# As this is an open source app, we need to generate this on first run.
+secret_filename = File.join(Rails.root, '.secret_token')
+unless File.exists?(secret_filename)
+  bytes = get_random_bytes
+  # Write bytes to file as characters
+  File.open(secret_filename, 'wb') { |f| f.write(bytes.map{|b| b.chr}.join) }
+end
+
+# Read secret
+OdsSruInterface::Application.config.secret_token = \
+  File.open(secret_filename, 'rb') { |f| f.read() }
