@@ -1,6 +1,7 @@
 # Be sure to restart your server when you modify this file.
 
-OdsSruInterface::Application.config.session_store :cookie_store, key: '_ods-sru-interface_session'
+OdsSruInterface::Application.config.session_store :cookie_store,
+  :key => '_ods-sru-interface_session'
 
 # Use the database for sessions instead of the cookie-based default,
 # which shouldn't be used to store highly confidential information
