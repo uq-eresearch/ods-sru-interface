@@ -1,5 +1,30 @@
 module StaffAnonymousIdentifierMixin
 
+  def self.included(base)
+    base.extend(ClassMethods)
+  end
+
+  module ClassMethods
+
+    MAX_STAFF_ID_PADDING = 12
+
+    def find_by_anonymous_identifier(anon_id)
+      # Convert from URN if necessary
+      anon_id = anon_id.rpartition(':').last if anon_id =~ /^urn:/i
+      # Find the matching identifier
+      anon_ident = StaffAnonymousIdentifier.find_by_anonymous_id(anon_id)
+      return nil if anon_ident.nil?
+      # Check with varying amounts of padding
+      possible_ids = \
+        ((anon_ident.staff_id.length)...MAX_STAFF_ID_PADDING).map do |padding|
+          anon_ident.staff_id.rjust(padding, '0')
+        end
+      # Return nill if nothing found
+      self.find_by_staff_id(possible_ids)
+    end
+
+  end
+
   def anonymous_identifier
     return nil if staff_id.nil?
     unpadded_id = staff_id.gsub(/^0*/,'')
