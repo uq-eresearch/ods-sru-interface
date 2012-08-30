@@ -13,6 +13,7 @@ class OrgUnit < ActiveRecord::Base
   end
 
   def email
+    return nil if unit_email.nil?
     words = unit_email.split(/\s+/)
     email_address = nil
     words.each do |word|
@@ -40,21 +41,29 @@ class OrgUnit < ActiveRecord::Base
           xml.originatingSource ''
           xml.party(:type => 'group') {
             xml.identifier(identifier, :type => 'AU-QU')
-            xml.location {
-              xml.address {
-                xml.physical {
-                  address_lines.each do |line|
-                    xml.addressPart(line, :type => 'addressLine')
-                  end
-                }
-              }
+            xml.name {
+              xml.namePart [
+                unit_prefix, unit_name, unit_suffix].compact.join(' ')
             }
             xml.location {
               xml.address {
-                xml.electronic(:type => 'email') {
-                  xml.value email
+                xml.physical(:type => 'streetAddress') {
+                  address_lines.each do |line|
+                    xml.addressPart(line, :type => 'addressLine')
+                  end
+                  xml.addressPart(unit_phone, :type => 'telephoneNumber') \
+                    unless unit_phone.nil?
+                  xml.addressPart(unit_fax, :type => 'faxNumber') \
+                    unless unit_fax.nil?
                 }
               }
+              unless email.nil?
+                xml.address {
+                  xml.electronic(:type => 'email') {
+                    xml.value email
+                  }
+                }
+              end
             }
           }
         }
