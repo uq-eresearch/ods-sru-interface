@@ -6,7 +6,6 @@ require 'spork'
 def start_simplecov
   require 'simplecov'
   SimpleCov.start :rails
-  require 'miletus'
 end
 
 Spork.prefork do
@@ -54,15 +53,12 @@ Spork.prefork do
     config.order = "random"
 
     # Rollback the database between tests
-    config.around do |example|
-      ActiveRecord::Base.transaction do
-        example.run
-        raise ActiveRecord::Rollback
-      end
-    end
-
-    # Mixin namespace helpers
-    config.include Miletus::NamespaceHelper
+    #config.around do |example|
+    #  ActiveRecord::Base.transaction do
+    #    example.run
+    #    raise ActiveRecord::Rollback
+    #  end
+    #end
 
   end
 end

@@ -24,7 +24,7 @@ class Rails::Application::Configuration
       'production' => ENV['DATABASE_URL']
     }
     config.each do |key, value|
-      env_config = get_database_environment_from_database_url(value)
+      env_config = self.class.database_environment_from_database_url(value)
       if env_config.nil?
         config.delete(key)
       else
@@ -35,7 +35,7 @@ class Rails::Application::Configuration
     config
   end
 
-  def get_database_environment_from_database_url(db_url)
+  def self.database_environment_from_database_url(db_url)
     # Based on how Heroku do it: https://gist.github.com/1059446
     begin
       uri = URI.parse(db_url)

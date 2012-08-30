@@ -200,6 +200,8 @@ GEM
       sexp_processor (~> 3.0)
     ruby_parser (2.3.1)
       sexp_processor (~> 3.0)
+    sanitize (2.0.3)
+      nokogiri (>= 1.4.4, < 1.6)
     sass (3.2.1)
     sass-rails (3.2.5)
       railties (~> 3.2.0)
@@ -273,6 +275,7 @@ DEPENDENCIES
   rake
   realrand
   rspec-rails
+  sanitize
   sass-rails (~> 3.2.3)
   simplecov
   spork

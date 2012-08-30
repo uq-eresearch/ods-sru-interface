@@ -44,6 +44,7 @@ gem 'activerecord-postgresql-adapter'
 gem 'pg'
 gem 'realrand' # For generating secret token
 gem 'equivalent-xml'
+gem 'sanitize' # For stripping out HTML
 
 gem 'twitter-bootstrap-rails'
 gem 'haml-rails'
