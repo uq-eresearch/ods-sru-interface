@@ -24,7 +24,7 @@ describe OrgUnit do
 
     subject.unit_email = \
       "Executive Assistant <br> Test User <br> t.user@uq.edu.au"
-    subject.email.should == "t.user@uq.edu.au <Executive Assistant Test User>"
+    subject.email.should == "Executive Assistant Test User <t.user@uq.edu.au>"
   end
 
 end

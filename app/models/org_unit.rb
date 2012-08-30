@@ -1,13 +1,8 @@
 class OrgUnit < ActiveRecord::Base
+  include OdsModelMixin
+  self.select_db
 
   self.table_name = 'org_unit'
-
-  if ENV.key?('ODS_DATABASE_URL')
-    establish_connection \
-      Rails::Application::Configuration.database_environment_from_database_url(
-        ENV['ODS_DATABASE_URL']
-      )
-  end
 
   def address_lines
     (1..4).map{ |i| self.send(("main_address_%d" % i).to_sym) }
@@ -28,18 +23,8 @@ class OrgUnit < ActiveRecord::Base
     if words.empty?
       email_address
     else
-      "%s <%s>" % [email_address, words.join(" ")]
+      "%s <%s>" % [words.join(" "), email_address]
     end
-  end
-
-  # Prevent creation of new records and modification to existing records
-  def readonly?
-    ENV.key?('ODS_DATABASE_URL')
-  end
-
-  # Prevent objects from being destroyed
-  def before_destroy
-    raise ActiveRecord::ReadOnlyRecord if readonly?
   end
 
 end
