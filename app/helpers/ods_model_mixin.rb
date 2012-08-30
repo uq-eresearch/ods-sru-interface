@@ -9,9 +9,7 @@ module OdsModelMixin
     def select_db
       return unless ENV.key?('ODS_DATABASE_URL')
       establish_connection Rails::Application::Configuration\
-        .database_environment_from_database_url(
-          ENV['ODS_DATABASE_URL']
-        )
+        .database_environment_from_database_url(ENV['ODS_DATABASE_URL'])
     end
   end
 

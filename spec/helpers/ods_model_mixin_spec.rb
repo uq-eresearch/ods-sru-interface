@@ -10,8 +10,14 @@ describe OdsModelMixin do
 
   describe "when ODS database is specified" do
 
-    before(:each) { ENV['ODS_DATABASE_URL'] = 'sqlite3://:memory:' }
+    before(:each) { ENV['ODS_DATABASE_URL'] = 'sqlite3:///:memory:' }
     after(:each)  { ENV.delete('ODS_DATABASE_URL') }
+
+    it "should establish a new DB connection when :select_db is called" do
+      subject.class.should_receive(:establish_connection)\
+        .with(kind_of(Hash)).once
+      subject.class.select_db
+    end
 
     it "should make object read-only" do
       subject.readonly?.should == true
@@ -24,6 +30,12 @@ describe OdsModelMixin do
   end
 
   describe "when no ODS database is specified" do
+
+    it "should not establish a new DB connection when :select_db is called" do
+      subject.class.should_not_receive(:establish_connection)\
+        .with(kind_of(Hash))
+      subject.class.select_db
+    end
 
     it "should not make object read-only" do
       subject.readonly?.should == false
