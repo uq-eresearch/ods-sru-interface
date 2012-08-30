@@ -4,6 +4,10 @@ class OrgUnit < ActiveRecord::Base
 
   self.table_name = 'org_unit'
 
+  def identifier
+    "urn:uq-org-unit:#{org_unit_id}"
+  end
+
   def address_lines
     (1..4).map{ |i| self.send(("main_address_%d" % i).to_sym) }
   end
@@ -25,6 +29,38 @@ class OrgUnit < ActiveRecord::Base
     else
       "%s <%s>" % [words.join(" "), email_address]
     end
+  end
+
+  def to_rif
+    builder = Nokogiri::XML::Builder.new do |xml|
+      xml.registryObjects(
+        'xmlns' => 'http://ands.org.au/standards/rif-cs/registryObjects') {
+        xml.registryObject(:group => 'The University of Queensland ODS') {
+          xml.key identifier
+          xml.originatingSource ''
+          xml.party(:type => 'group') {
+            xml.identifier(identifier, :type => 'AU-QU')
+            xml.location {
+              xml.address {
+                xml.physical {
+                  address_lines.each do |line|
+                    xml.addressPart(line, :type => 'addressLine')
+                  end
+                }
+              }
+            }
+            xml.location {
+              xml.address {
+                xml.electronic(:type => 'email') {
+                  xml.value email
+                }
+              }
+            }
+          }
+        }
+      }
+    end
+    builder.to_xml
   end
 
 end
