@@ -2,11 +2,11 @@ require 'spec_helper'
 
 describe OdsModelMixin do
 
-  class TestObject < Struct.new(:some_field)
+  class OdsModelMixinTestObject < Struct.new(:some_field)
     include OdsModelMixin
   end
 
-  subject { TestObject.new }
+  subject { OdsModelMixinTestObject.new }
 
   describe "when ODS database is specified" do
 
