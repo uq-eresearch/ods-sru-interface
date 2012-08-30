@@ -2,8 +2,6 @@
 
 [![Build Status](https://secure.travis-ci.org/uq-eresearch/ods-sru-interface.png)
 ](http://travis-ci.org/uq-eresearch/ods-sru-interface)
-[![Dependency Status](https://gemnasium.com/uq-eresearch/ods-sru-interface.png)
-](https://gemnasium.com/uq-eresearch/ods-sru-interface)
 [![Code Climate](https://codeclimate.com/badge.png)
 ](https://codeclimate.com/github/uq-eresearch/ods-sru-interface)
 
