@@ -40,19 +40,14 @@ class OrgUnit < ActiveRecord::Base
 
     def to_s
       builder = Nokogiri::XML::Builder.new do |xml|
-        xml.registryObjects(
-          'xmlns' => 'http://ands.org.au/standards/rif-cs/registryObjects') {
-          xml.registryObject(:group => 'The University of Queensland ODS') {
+        xml.registryObjects('xmlns' => namespace) {
+          xml.registryObject(:group => group) {
             xml.key @org_unit.identifier
             xml.originatingSource ''
             xml.party(:type => 'group') {
               xml.identifier(@org_unit.identifier, :type => 'AU-QU')
               name(xml)
-              xml.location {
-                physical(xml)
-                email(xml)
-                url(xml)
-              } if has_location?
+              location(xml)
             }
           }
         }
@@ -61,6 +56,14 @@ class OrgUnit < ActiveRecord::Base
     end
 
     private
+
+    def namespace
+      'http://ands.org.au/standards/rif-cs/registryObjects'
+    end
+
+    def group
+      'The University of Queensland ODS'
+    end
 
     def name(xml)
       xml.name {
@@ -71,46 +74,56 @@ class OrgUnit < ActiveRecord::Base
       }
     end
 
+    def location(xml)
+      # Check if we need this element
+      return if [
+        @org_unit.address_lines.empty?,
+        @org_unit.unit_phone.nil?,
+        @org_unit.unit_fax.nil?,
+        @org_unit.email.nil?,
+        @org_unit.unit_url.nil?].all?
+      # Build the location element
+      xml.location {
+        physical(xml)
+        email(xml)
+        url(xml)
+      }
+    end
+
     def physical(xml)
       return if @org_unit.unit_phone.nil? and
         @org_unit.unit_fax.nil? and @org_unit.address_lines.empty?
       xml.address {
         xml.physical(:type => 'streetAddress') {
           @org_unit.address_lines.each do |line|
-            xml.addressPart(line, :type => 'addressLine')
+            addressPart(xml, 'addressLine', line)
           end
-          xml.addressPart(@org_unit.unit_phone, :type => 'telephoneNumber') \
-            unless @org_unit.unit_phone.nil?
-          xml.addressPart(@org_unit.unit_fax, :type => 'faxNumber') \
-            unless @org_unit.unit_fax.nil?
+          addressPart(xml, 'telephoneNumber', @org_unit.unit_phone)
+          addressPart(xml, 'faxNumber', @org_unit.unit_fax)
         }
       }
+    end
+
+    def addressPart(xml, type, value)
+      return if value.nil?
+      xml.addressPart(value, :type => type)
     end
 
     def email(xml)
-      return if @org_unit.email.nil?
-      xml.address {
-        xml.electronic(:type => 'email') {
-          xml.value @org_unit.email
-        }
-      }
+      electronic_address(xml, 'email', @org_unit.email)
     end
 
     def url(xml)
-      return if @org_unit.unit_url.nil?
-      xml.address {
-        xml.electronic(:type => 'url') {
-          xml.value @org_unit.unit_url
-        }
-      }
+      electronic_address(xml, 'url', @org_unit.unit_url)
     end
 
-    def has_location?
-      not [@org_unit.address_lines.empty?,
-        @org_unit.unit_phone.nil?,
-        @org_unit.unit_fax.nil?,
-        @org_unit.email.nil?,
-        @org_unit.unit_url.nil?].all?
+    def electronic_address(xml, type, value)
+      return if value.nil?
+      xml.address {
+        xml.electronic(:type => type) {
+          xml.value value
+        }
+      }
     end
 
   end
