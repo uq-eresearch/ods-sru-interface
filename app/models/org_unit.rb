@@ -43,7 +43,7 @@ class OrgUnit < ActiveRecord::Base
         xml.registryObjects('xmlns' => namespace) {
           xml.registryObject(:group => group) {
             xml.key @org_unit.identifier
-            xml.originatingSource ''
+            xml.originatingSource group
             xml.party(:type => 'group') {
               xml.identifier(@org_unit.identifier, :type => 'AU-QU')
               name(xml)
