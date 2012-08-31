@@ -58,6 +58,7 @@ describe OrgUnit do
       match(/#{subject.org_unit_id}$/)
     doc.at_xpath('//rif:identifier', ns_decl).content.should \
       match(/#{subject.org_unit_id}$/)
+    doc.at_xpath('//rif:party', ns_decl)['type'].should == 'group'
     doc.at_xpath('//rif:name/rif:namePart', ns_decl).content.should \
       == "Office of the Pro-Vice-Chancellor"
     streetAddress = doc.at_xpath(

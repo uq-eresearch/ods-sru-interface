@@ -14,7 +14,7 @@ class StaffPerson < ActiveRecord::Base
     first_names.split(/\s+/)
   end
 
-  class RifCSRepresentation
+  class RifCsRepresentation
 
     def initialize(staff_person)
       @person = staff_person
@@ -26,7 +26,7 @@ class StaffPerson < ActiveRecord::Base
           xml.registryObject(:group => group) {
             xml.key @person.identifier
             xml.originatingSource group
-            xml.party(:type => 'group') {
+            xml.party(:type => 'person') {
               xml.identifier(@person.identifier, :type => 'AU-QU')
               primary_name(xml)
               alt_name(xml)
@@ -86,7 +86,7 @@ class StaffPerson < ActiveRecord::Base
   end
 
   def to_rif
-    RifCSRepresentation.new(self).to_s
+    RifCsRepresentation.new(self).to_s
   end
 
 

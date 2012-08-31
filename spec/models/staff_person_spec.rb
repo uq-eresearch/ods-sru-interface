@@ -25,6 +25,7 @@ describe StaffPerson do
       ns_decl = {'rif' => 'http://ands.org.au/standards/rif-cs/registryObjects'}
       doc.at_xpath('//rif:key', ns_decl).content.should \
         == subject.anonymous_identifier.urn
+        doc.at_xpath('//rif:party', ns_decl)['type'].should == 'person'
       doc.at_xpath('//rif:identifier', ns_decl).content.should \
         == subject.anonymous_identifier.urn
       primary_name = doc.at_xpath('//rif:name[@type="primary"]', ns_decl)

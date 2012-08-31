@@ -32,7 +32,7 @@ class OrgUnit < ActiveRecord::Base
     end
   end
 
-  class RifCSRepresentation
+  class RifCsRepresentation
 
     def initialize(org_unit)
       @org_unit = org_unit
@@ -129,7 +129,7 @@ class OrgUnit < ActiveRecord::Base
   end
 
   def to_rif
-    RifCSRepresentation.new(self).to_s
+    RifCsRepresentation.new(self).to_s
   end
 
 end
