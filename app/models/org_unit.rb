@@ -32,44 +32,91 @@ class OrgUnit < ActiveRecord::Base
     end
   end
 
-  def to_rif
-    builder = Nokogiri::XML::Builder.new do |xml|
-      xml.registryObjects(
-        'xmlns' => 'http://ands.org.au/standards/rif-cs/registryObjects') {
-        xml.registryObject(:group => 'The University of Queensland ODS') {
-          xml.key identifier
-          xml.originatingSource ''
-          xml.party(:type => 'group') {
-            xml.identifier(identifier, :type => 'AU-QU')
-            xml.name {
-              xml.namePart [
-                unit_prefix, unit_name, unit_suffix].compact.join(' ')
-            }
-            xml.location {
-              xml.address {
-                xml.physical(:type => 'streetAddress') {
-                  address_lines.each do |line|
-                    xml.addressPart(line, :type => 'addressLine')
-                  end
-                  xml.addressPart(unit_phone, :type => 'telephoneNumber') \
-                    unless unit_phone.nil?
-                  xml.addressPart(unit_fax, :type => 'faxNumber') \
-                    unless unit_fax.nil?
-                }
-              }
-              unless email.nil?
-                xml.address {
-                  xml.electronic(:type => 'email') {
-                    xml.value email
-                  }
-                }
-              end
+  class RifCSRepresentation
+
+    def initialize(org_unit)
+      @org_unit = org_unit
+    end
+
+    def to_s
+      builder = Nokogiri::XML::Builder.new do |xml|
+        xml.registryObjects(
+          'xmlns' => 'http://ands.org.au/standards/rif-cs/registryObjects') {
+          xml.registryObject(:group => 'The University of Queensland ODS') {
+            xml.key @org_unit.identifier
+            xml.originatingSource ''
+            xml.party(:type => 'group') {
+              xml.identifier(@org_unit.identifier, :type => 'AU-QU')
+              name(xml)
+              xml.location {
+                physical(xml)
+                email(xml)
+                url(xml)
+              } if has_location?
             }
           }
         }
+      end
+      builder.to_xml
+    end
+
+    private
+
+    def name(xml)
+      xml.name {
+        xml.namePart [
+          @org_unit.unit_prefix,
+          @org_unit.unit_name,
+          @org_unit.unit_suffix].compact.join(' ')
       }
     end
-    builder.to_xml
+
+    def physical(xml)
+      return if @org_unit.unit_phone.nil? and
+        @org_unit.unit_fax.nil? and @org_unit.address_lines.empty?
+      xml.address {
+        xml.physical(:type => 'streetAddress') {
+          @org_unit.address_lines.each do |line|
+            xml.addressPart(line, :type => 'addressLine')
+          end
+          xml.addressPart(@org_unit.unit_phone, :type => 'telephoneNumber') \
+            unless @org_unit.unit_phone.nil?
+          xml.addressPart(@org_unit.unit_fax, :type => 'faxNumber') \
+            unless @org_unit.unit_fax.nil?
+        }
+      }
+    end
+
+    def email(xml)
+      return if @org_unit.email.nil?
+      xml.address {
+        xml.electronic(:type => 'email') {
+          xml.value @org_unit.email
+        }
+      }
+    end
+
+    def url(xml)
+      return if @org_unit.unit_url.nil?
+      xml.address {
+        xml.electronic(:type => 'url') {
+          xml.value @org_unit.unit_url
+        }
+      }
+    end
+
+    def has_location?
+      not [@org_unit.address_lines.empty?,
+        @org_unit.unit_phone.nil?,
+        @org_unit.unit_fax.nil?,
+        @org_unit.email.nil?,
+        @org_unit.unit_url.nil?].all?
+    end
+
+  end
+
+  def to_rif
+    RifCSRepresentation.new(self).to_s
   end
 
 end

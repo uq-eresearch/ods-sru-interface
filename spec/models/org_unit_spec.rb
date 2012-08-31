@@ -33,6 +33,7 @@ describe OrgUnit do
     subject.unit_suffix = nil
     subject.unit_phone = "+61 (7) 9999 9999"
     subject.unit_fax = "+61 (7) 9999 9998"
+    subject.unit_url = "http://example.test/"
     subject.org_unit_id = 15
     subject.main_address_1 = "Room 304, Level 3"
     subject.main_address_2 = "Building No. 8"
