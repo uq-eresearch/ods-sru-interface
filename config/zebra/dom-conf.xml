@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- this file configures the Zebra DOM XML filter -->
+<!-- see: http://www.indexdata.com/zebra/doc/record-model-dom.html -->
+
+<dom>
+
+  <input syntax="xml">
+    <xmlreader level="1"/>
+  </input>
+
+  <extract name="index">
+    <xslt stylesheet="config/zebra/rifcs2index.xsl"/>
+  </extract>
+
+  <retrieve name="rif">
+  </retrieve>
+
+  <retrieve name="dc">
+    <xslt stylesheet="config/zebra/rifcs2dc.xsl"/>
+  </retrieve>
+
+  <retrieve name="zebra">
+    <xslt stylesheet="config/zebra/rifcs2zebra.xsl"/>
+  </retrieve>
+
+ </dom>

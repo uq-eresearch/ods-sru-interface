@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- this file configures the frontend YAZ server -->
+<!-- see: http://www.indexdata.com/yaz/doc/server.vhosts.tkl -->
+<yazgfs>
+
+  <!-- one or more ports to listen to -->
+  <listen id="unixsock">unix:tmp/zebra.sock</listen>
+
+  <!-- one or more servers bound to ports - multiple servers on same
+       ports possible -->
+  <server id="rifcs" listenref="unixsock">
+
+    <!-- working directory for zebra -->
+    <directory>./</directory>
+
+    <!-- ordinary config file for zebra -->
+    <config>config/zebra/zebra.cfg</config>
+
+    <!-- location of CQL-to-PQF file
+         see: http://www.indexdata.com/yaz/doc/tools.tkl#tools.cql.map -->
+    <cql2rpn>config/zebra/cql2pqf.txt</cql2rpn>
+
+  </server>
+
+</yazgfs>
