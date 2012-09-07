@@ -24,8 +24,7 @@ set.dc = info:srw/cql-context-set/1/dc-v1.1
 index.cql.serverChoice = 1=any
 index.cql.all = 1=any
 index.rec.id = 1=identifier 4=3
-index.oai.identifier = 1=identifier 4=3
-index.oai.date = 1=datestamp 4=3
+index.rec.identifier = 1=identifier 4=3
 index.dc.title = 1=title
 index.dc.creator = 1=creator
 index.dc.subject = 1=subject

@@ -38,8 +38,18 @@ class OrgUnit < ActiveRecord::Base
       @org_unit = org_unit
     end
 
+    def to_doc
+      build.doc
+    end
+
     def to_s
-      builder = Nokogiri::XML::Builder.new do |xml|
+      build.to_xml
+    end
+
+    private
+
+    def build
+      Nokogiri::XML::Builder.new do |xml|
         xml.registryObjects('xmlns' => namespace) {
           xml.registryObject(:group => group) {
             xml.key @org_unit.identifier
@@ -52,10 +62,7 @@ class OrgUnit < ActiveRecord::Base
           }
         }
       end
-      builder.to_xml
     end
-
-    private
 
     def namespace
       'http://ands.org.au/standards/rif-cs/registryObjects'
@@ -126,6 +133,17 @@ class OrgUnit < ActiveRecord::Base
       }
     end
 
+  end
+
+  def self.to_rif
+    StaffAnonymousIdentifier.update_cache
+    doc = all.map {|i| RifCsRepresentation.new(i).to_doc}.reduce do |d, o|
+      d.root << o.root.children
+      d
+    end
+    # Ensure everything is in the same namespace
+    doc.root.children.each {|n| n.namespace = n.parent.namespace}
+    doc.to_xml
   end
 
   def to_rif

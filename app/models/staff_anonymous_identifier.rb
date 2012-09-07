@@ -1,5 +1,7 @@
 class StaffAnonymousIdentifier < ActiveRecord::Base
 
+  @@cache = {}
+
   URN_PREFIX = 'uq-staff-ref'
 
   attr_accessible :staff_id
@@ -11,6 +13,14 @@ class StaffAnonymousIdentifier < ActiveRecord::Base
 
   def urn
     "urn:#{URN_PREFIX}:#{anonymous_id}"
+  end
+
+  def self.cache
+    @@cache
+  end
+
+  def self.update_cache
+    @@cache = StaffAnonymousIdentifier.all.index_by(&:staff_id)
   end
 
   private

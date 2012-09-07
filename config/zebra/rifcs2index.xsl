@@ -15,12 +15,12 @@
 
   <!-- match on rifcs xml record -->
   <xsl:template match="/">
-    <z:record z:id="{normalize-space(rif:registryObjects/rif:registryObject/rif:key)}">
+    <z:record z:id="{normalize-space(//rif:registryObject/rif:key)}">
       <xsl:apply-templates/>
     </z:record>
   </xsl:template>
 
-  <xsl:template match="rif:registryObjects/rif:registryObject">
+  <xsl:template match="rif:registryObject">
      <xsl:apply-templates/>
   </xsl:template>
 
@@ -37,7 +37,6 @@
     </z:index>
   </xsl:template>
 
-  <!-- DC specific indexing templates -->
   <xsl:template match="rif:name/rif:namePart">
     <z:index name="any:w title:w title:p">
       <xsl:value-of select="."/>

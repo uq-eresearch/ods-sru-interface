@@ -23,12 +23,20 @@ module StaffAnonymousIdentifierMixin
       self.find_by_staff_id(possible_ids)
     end
 
+    def anon_id_by_staff_id(staff_id)
+      if StaffAnonymousIdentifier.cache.key?(staff_id)
+        StaffAnonymousIdentifier.cache[staff_id]
+      else
+        StaffAnonymousIdentifier.find_or_create_by_staff_id(staff_id)
+      end
+    end
+
   end
 
   def anonymous_identifier
     return nil if staff_id.nil?
     unpadded_id = staff_id.gsub(/^0*/,'')
-    StaffAnonymousIdentifier.find_or_create_by_staff_id(unpadded_id)
+    self.class.anon_id_by_staff_id(unpadded_id)
   end
 
 end

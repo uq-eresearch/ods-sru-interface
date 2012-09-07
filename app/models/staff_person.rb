@@ -20,14 +20,25 @@ class StaffPerson < ActiveRecord::Base
       @person = staff_person
     end
 
+    def to_doc
+      build.doc
+    end
+
     def to_s
-      builder = Nokogiri::XML::Builder.new do |xml|
+      build.to_xml
+    end
+
+    private
+
+    def build
+      Nokogiri::XML::Builder.new do |xml|
         xml.registryObjects('xmlns' => namespace) {
           xml.registryObject(:group => group) {
             xml.key @person.identifier
             xml.originatingSource group
             xml.party(:type => 'person') {
               xml.identifier(@person.identifier, :type => 'AU-QU')
+              email_identifier(xml)
               primary_name(xml)
               alt_name(xml)
               email(xml)
@@ -35,10 +46,7 @@ class StaffPerson < ActiveRecord::Base
           }
         }
       end
-      builder.to_xml
     end
-
-    private
 
     def namespace
       'http://ands.org.au/standards/rif-cs/registryObjects'
@@ -71,6 +79,11 @@ class StaffPerson < ActiveRecord::Base
       }
     end
 
+    def email_identifier(xml)
+      return if @person.email.nil?
+      xml.identifier('mailto:%s' % @person.email, :type => 'uri')
+    end
+
     def email(xml)
       return if @person.email.nil?
       # Build the location element
@@ -83,6 +96,17 @@ class StaffPerson < ActiveRecord::Base
       }
     end
 
+  end
+
+  def self.to_rif
+    StaffAnonymousIdentifier.update_cache
+    doc = all.map {|i| RifCsRepresentation.new(i).to_doc}.reduce do |d, o|
+      d.root << o.root.children
+      d
+    end
+    # Ensure everything is in the same namespace
+    doc.root.children.each {|n| n.namespace = n.parent.namespace}
+    doc.to_xml
   end
 
   def to_rif
