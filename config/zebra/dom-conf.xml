@@ -14,6 +14,7 @@
   </extract>
 
   <retrieve name="rif">
+    <xslt stylesheet="config/zebra/rifcs2rifcsdoc.xsl"/>
   </retrieve>
 
   <retrieve name="dc">
