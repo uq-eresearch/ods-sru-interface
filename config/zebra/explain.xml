@@ -32,11 +32,11 @@
     <title lang="en" primary="true">OAI record SRU/SRW/Z39.50 server</title>
 
     <description lang="en" primary="true">
-      OAI harvested article and preprint metadata records 
+      OAI harvested article and preprint metadata records
     </description>
 
     <author>
-      Marc Cromme, © Index Data Aps, 
+      Marc Cromme, © Index Data Aps,
       http://www.indexdata.dk
     </author>
 
@@ -54,13 +54,13 @@
     <implementation  identifier="zebra" version="2.0">
       <title>Index Data YAZ/ZEBRA http://www.indexdata.dk/zebra</title>
     </implementation>
-    
-    <links> 
+
+    <links>
       <link type="z39.50">http://localhost:9999</link>
       <link type="srw">http://localhost:9999</link>
       <link type="sru">http://localhost:9999</link>
     </links>
-    
+
   </databaseInfo>
 
   <!--
@@ -72,220 +72,31 @@
   </metaInfo>
   -->
 
-
-  <indexInfo>
-    <set name="cql" identifier="info:srw/cql-context-set/1/cql-v1.1">
-      <title>CQL Standard Set</title>
-    </set>
-    <set name="rec" identifier="info:srw/cql-context-set/2/rec-1.0">
-      <title>Record Standard Set</title>
-    </set>
-    <set name="oai" identifier="info:srw/cql-context-set/1/oai-v1.1">
-      <title>Open Archive Metadata Set</title>
-    </set>
-    <set name="dc" identifier="info:srw/cql-context-set/1/dc-v1.1">
-      <title>Dublin Core Set</title>
-    </set>
-
-    <!-- CQL standard index -->
-    <index search="true" scan="true" sort="false">
-      <title lang="en">CQL Server Choice</title>
-      <map><name set="cql">serverChoice</name></map>
-      <map>
-        <attr type="1" set="bib1">any</attr>
-      </map>
-    </index>
-    <index search="true" scan="true" sort="false">
-      <title lang="en">CQL All</title>
-      <map><name set="cql">all</name></map>
-      <map>
-        <attr type="1" set="bib1">any</attr>
-      </map>
-    </index>
-
-    <!-- Record ID index -->
-    <index search="true" scan="true" sort="false">
-      <title lang="en">Record ID</title>
-      <map><name set="rec">id</name></map>
-      <map>
-        <attr type="1" set="bib1">oai_identifier</attr>
-        <attr type="4" set="bib1">3</attr>
-      </map>
-    </index>
-
-    <!-- Open Archive Metadata indexes -->
-    <index search="true" scan="true" sort="false">
-      <title lang="en">OAI Identifier</title>
-      <map><name set="oai">identifier</name></map>
-      <map>
-        <attr type="1" set="bib1">oai_identifier</attr>
-        <attr type="4" set="bib1">3</attr>
-      </map>
-    </index>
-    <index search="true" scan="true" sort="false">
-      <title lang="en">OAI Datestamp</title>
-      <map><name set="oai">date</name></map>
-      <map>
-        <attr type="1" set="bib1">oai_datestamp</attr>
-        <attr type="4" set="bib1">3</attr>
-      </map>
-    </index>
-    <index search="true" scan="true" sort="false">
-      <title lang="en">OAI Set Specification</title>
-      <map><name set="oai">set</name></map>
-      <map>
-        <attr type="1" set="bib1">oai_setspec</attr>
-        <attr type="4" set="bib1">3</attr>
-      </map>
-    </index>
-
-    <!-- Dublin Core Indexes -->
-    <index search="true" scan="true" sort="false">
-      <title lang="en">DC Title</title>
-      <map><name set="dc">title</name></map>
-      <map>
-        <attr type="1" set="bib1">dc_title</attr>
-      </map>
-    </index>
-    <index search="true" scan="true" sort="false">
-      <title lang="en">DC Creator</title>
-      <map><name set="dc">creator</name></map>
-      <map>
-        <attr type="1" set="bib1">dc_creator</attr>
-      </map>
-    </index>
-    <index search="true" scan="true" sort="false">
-      <title lang="en">DC Subject</title>
-      <map><name set="dc">subject</name></map>
-      <map>
-        <attr type="1" set="bib1">dc_subject</attr>
-        <!-- <attr type="6" set="bib1">3</attr> -->
-      </map>
-    </index>
-    <index search="true" scan="true" sort="false">
-      <title lang="en">DC Description</title>
-      <map><name set="dc">description</name></map>
-      <map>
-        <attr type="1" set="bib1">dc_description</attr>
-      </map>
-    </index>
-    <index search="true" scan="true" sort="false">
-      <title lang="en">DC Publisher</title>
-      <map><name set="dc">publisher</name></map>
-      <map>
-        <attr type="1" set="bib1">dc_publisher</attr>
-        <!-- <attr type="6" set="bib1">3</attr> -->
-      </map>
-    </index>
-    <index search="true" scan="true" sort="false">
-      <title lang="en">DC Contributor</title>
-      <map><name set="dc">contributor</name></map>
-      <map>
-        <attr type="1" set="bib1">dc_contributor</attr>
-      </map>
-    </index>
-    <index search="true" scan="true" sort="false">
-      <title lang="en">DC Date</title>
-      <map><name set="dc">date</name></map>
-      <map>
-        <attr type="1" set="bib1">dc_date</attr>
-        <attr type="4" set="bib1">3</attr>
-      </map>
-    </index>
-    <!--
-    <index search="true" scan="true" sort="false">
-      <title lang="en">DC Type</title>
-      <map><name set="dc">type</name></map>
-      <map>
-        <attr type="1" set="bib1">dc_type</attr>
-      </map>
-    </index>
-    -->
-    <index search="true" scan="true" sort="false">
-      <title lang="en">DC Format</title>
-      <map><name set="dc">format</name></map>
-      <map>
-        <attr type="1" set="bib1"></attr>
-        <attr type="4" set="bib1">3</attr>
-      </map>
-    </index>
-    <index search="true" scan="true" sort="false">
-      <title lang="en">DC Identifier</title>
-      <map><name set="dc">identifier</name></map>
-      <map>
-        <attr type="1" set="bib1">dc_identifier</attr>
-        <attr type="4" set="bib1">3</attr>
-      </map>
-    </index>
-    <index search="true" scan="true" sort="false">
-      <title lang="en">DC Source</title>
-      <map><name set="dc">source</name></map>
-      <map>
-        <attr type="1" set="bib1">dc_source</attr>
-        <attr type="4" set="bib1">3</attr>
-      </map>
-    </index>
-    <index search="true" scan="true" sort="false">
-      <title lang="en">DC Language</title>
-      <map><name set="dc">language</name></map>
-      <map>
-        <attr type="1" set="bib1">dc_language</attr>
-      </map>
-    </index>
-    <index search="true" scan="true" sort="false">
-      <title lang="en">DC Relation</title>
-      <map><name set="dc">relation</name></map>
-      <map>
-        <attr type="1" set="bib1">dc_relation</attr>
-        <attr type="4" set="bib1">3</attr>
-      </map>
-    </index>
-    <index search="true" scan="true" sort="false">
-      <title lang="en">DC Source</title>
-      <map><name set="dc">source</name></map>
-      <map>
-        <attr type="1" set="bib1">dc_source</attr>
-        <attr type="4" set="bib1">3</attr>
-      </map>
-    </index>
-    <!--
-    <index search="true" scan="true" sort="false">
-      <title lang="en">DC Coverage</title>
-      <map><name set="dc">coverage</name></map>
-      <map>
-        <attr type="1" set="bib1">dc_coverage</attr>
-      </map>
-    </index>
-    -->
-    <index search="true" scan="true" sort="false">
-      <title lang="en">DC Rights</title>
-      <map><name set="dc">rights</name></map>
-      <map>
-        <attr type="1" set="bib1">dc_rights</attr>
-        <!-- <attr type="6" set="bib1">3</attr> -->
-      </map>
-    </index>
-
-  </indexInfo>
-
   <schemaInfo>
 
+    <schema identifier="http://ands.org.au/standards/rif-cs/registryObjects"
+            location="http://services.ands.org.au/documentation/rifcs/schema/registryObjects.xsd"
+            name="rif"
+            retrieve="true">
+      <title lang="en">RIF-CS</title>
+    </schema>
+
     <schema identifier="http://www.loc.gov/zing/srw/dcschema/v1.0/"
-            location="http://www.loc.gov/zing/srw/dc.xsd" 
+            location="http://www.loc.gov/zing/srw/dc.xsd"
             name="dc"
             retrieve="true">
       <title lang="en">Dublin Core</title>
     </schema>
 
     <schema identifier="http://indexdata.dk/dc-short"
-            location="" 
+            location=""
             name="zebra::data"
             retrieve="true">
       <title lang="en">Open Archives Initiative</title>
     </schema>
 
     <schema identifier="http://indexdata.dk/zebra/xslt/retrieve"
-            location="" 
+            location=""
             name="zebra::meta"
             retrieve="true">
       <title lang="en">Zebra Meta</title>
@@ -293,7 +104,7 @@
 
   </schemaInfo>
 
- 
+
   <configInfo>
 
     <!-- default context set -->
@@ -325,7 +136,7 @@
     <!-- zebra happily accepts empty terms, if escaped in quotes -->
     <supports type="emptyTerm"></supports>
 
-    <!-- presentation settings --> 
+    <!-- presentation settings -->
 
     <!-- default number of records that a server will return at once  -->
     <default type="numberOfRecords">0</default>
@@ -340,7 +151,7 @@
     <!-- <setting type="maximumRecords">1000</setting> -->
 
     <!-- support result sets (Empty) -->
-    <!-- <supports type="resultSets"></supports>  --> 
+    <!-- <supports type="resultSets"></supports>  -->
 
 
     <!-- scan settings -->
@@ -351,9 +162,6 @@
     <!-- default number of terms to be returned in scan -->
     <default type="numberOfTerms">20</default>
 
-    <!-- number of seconds that a result set will be maintained for -->
-    <setting type="resultSetTTL">0</setting>
-
   </configInfo>
-   
+
 </explain>

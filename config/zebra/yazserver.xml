@@ -21,6 +21,21 @@
          see: http://www.indexdata.com/yaz/doc/tools.tkl#tools.cql.map -->
     <cql2rpn>config/zebra/cql2pqf.txt</cql2rpn>
 
+    <!-- explain message - send in SRW Explain
+         - yes, we understand Z39.50 and SRW on the same port !! -->
+    <xi:include href="explain.xml"
+                xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>
+        <explain xmlns="http://explain.z3950.org/dtd/2.0/">
+          <serverInfo>
+            <host>localhost</host>
+            <port>9999</port>
+            <database>Default</database>
+          </serverInfo>
+        </explain>
+      </xi:fallback>
+    </xi:include>
+
   </server>
 
 </yazgfs>
