@@ -1,4 +1,7 @@
 OdsSruInterface::Application.routes.draw do
+
+  match 'sru' => 'sru#proxy'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

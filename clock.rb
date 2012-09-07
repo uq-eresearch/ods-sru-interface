@@ -8,16 +8,15 @@ module Clockwork
 
   every(5.minutes, 'output.records') do
     models = [Grant, OrgUnit, StaffPerson]
-    models.each do |model|
-      model_name = model.name.underscore.dasherize
-      model.all.each do |grant|
-        File.open('tmp/data/%s-%s.xml' % [model_name, grant.id], 'wb') do |f|
-          f.write(grant.to_rif)
+    IdZebra::log_level = :warn
+    IdZebra::API('config/zebra/zebra.cfg') do |repo|
+      models.each do |model|
+        model.all.each do |obj|
+          repo.add_record(obj.to_rif)
         end
       end
+      repo.commit
     end
-    system('zebraidx -c config/zebra/zebra.cfg update tmp/data')
-    system('zebraidx -c config/zebra/zebra.cfg commit')
   end
 
 end

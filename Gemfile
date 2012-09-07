@@ -48,6 +48,7 @@ gem 'sanitize' # For stripping out HTML
 
 gem 'twitter-bootstrap-rails'
 gem 'haml-rails'
+gem 'idzebra'
 
 group :test do
   gem 'webmock' # For VCR
