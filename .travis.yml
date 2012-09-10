@@ -1,5 +1,7 @@
 language: ruby
 bundler_args: --without development
+before_install:
+  - sudo apt-get install -qq idzebra-2.0 yaz
 rvm:
   - 1.9.3
 script: bundle exec rspec && bundle exec brakeman -q
