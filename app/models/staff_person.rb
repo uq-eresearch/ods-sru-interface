@@ -123,7 +123,8 @@ class StaffPerson < ActiveRecord::Base
 
   end
 
-  def self.all_with_relations
+  def self.all_with_related
+    StaffAnonymousIdentifier.update_cache
     includes(:org_units).all
   end
 

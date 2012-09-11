@@ -11,9 +11,8 @@ module RifcsRepresentationMixin
     end
 
     def to_rif
-      StaffAnonymousIdentifier.update_cache
-      doc = all_with_related.map do |p|
-        RifCsRepresentation.new(p).to_doc
+      doc = self.all_with_related.map do |p|
+        self::RifCsRepresentation.new(p).to_doc
       end.reduce do |d, o|
         d.root << o.root.children
         d

@@ -14,6 +14,7 @@ class Grant < ActiveRecord::Base
   def identifier
     "urn:uq-grant-code:#{project_code}"
   end
+
   class RifCsRepresentation
 
     def initialize(grant)
