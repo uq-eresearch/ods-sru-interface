@@ -4,6 +4,8 @@ describe OrgUnit do
 
   subject { OrgUnit.new }
 
+  it { should respond_to(:staff) }
+
   it "should provide all the address lines as a single property" do
     subject.main_address_1 = "Room 304, Level 3"
     subject.main_address_2 = "Building No. 8"

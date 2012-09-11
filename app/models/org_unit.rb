@@ -4,6 +4,15 @@ class OrgUnit < ActiveRecord::Base
 
   self.table_name = 'org_unit'
 
+  has_many :staff_positions,
+    :class_name => 'StaffPlacement',
+    :foreign_key => 'org_unit_id',
+    :conditions => { :current_placement_flag => 'Y' }
+
+  has_many :staff,
+    :through => :staff_positions,
+    :source => :person
+
   def identifier
     "urn:uq-org-unit:#{org_unit_id}"
   end

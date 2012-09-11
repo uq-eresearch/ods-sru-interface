@@ -6,6 +6,14 @@ class StaffPerson < ActiveRecord::Base
 
   self.table_name = 'stf_person'
 
+  has_many :positions,
+    :class_name => 'StaffPlacement',
+    :foreign_key => 'staff_id',
+    :conditions => { :current_placement_flag => 'Y' }
+
+  has_many :org_units,
+    :through => :positions
+
   def_delegator :anonymous_identifier, :urn, :identifier
 
   alias_attribute :family_name, :last_name_mixed
@@ -42,6 +50,7 @@ class StaffPerson < ActiveRecord::Base
               primary_name(xml)
               alt_name(xml)
               email(xml)
+              related_objects(xml)
             }
           }
         }
@@ -96,11 +105,26 @@ class StaffPerson < ActiveRecord::Base
       }
     end
 
+    def related_objects(xml)
+      begin
+        @person.org_units.each do |ou|
+          xml.relatedObject {
+            xml.key(ou.identifier)
+            xml.relation(:type => 'isMemberOf')
+          }
+        end
+      rescue ActiveRecord::UnknownPrimaryKey
+        # Ignore possible incomplete relationships
+      end
+    end
+
   end
 
   def self.to_rif
     StaffAnonymousIdentifier.update_cache
-    doc = all.map {|i| RifCsRepresentation.new(i).to_doc}.reduce do |d, o|
+    doc = includes(:org_units).all.map do |p|
+      RifCsRepresentation.new(p).to_doc
+    end.reduce do |d, o|
       d.root << o.root.children
       d
     end

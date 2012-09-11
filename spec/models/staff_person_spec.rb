@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 describe StaffPerson do
-  it { should respond_to(:staff_id, :anonymous_identifier) }
+
+  it { should respond_to(:staff_id, :anonymous_identifier, :org_units) }
 
   it "should output RIF-CS with :to_rif" do
       subject.staff_id = "98773"

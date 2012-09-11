@@ -53,7 +53,6 @@ describe SruController do
     run_server do
       get :proxy, sru_params
       response.code.to_i.should == 200
-      puts response.body
       response.body.should satisfy do |xml|
         xml =~ /<zs:numberOfRecords>(\d+)<\/zs:numberOfRecords>/
       end
