@@ -6,7 +6,7 @@ Dir.mkdir('tmp/data') rescue nil
 
 module Clockwork
 
-  every(5.minutes, 'output.records') do
+  every(15.minutes, 'output.records') do
     models = [StaffPerson, Grant, OrgUnit]
     IdZebra::log_level = :info
     IdZebra::API('config/zebra/zebra.cfg') do |repo|
