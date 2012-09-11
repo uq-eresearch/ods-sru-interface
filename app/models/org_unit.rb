@@ -1,5 +1,8 @@
+require 'rifcs_registry_object_mixin'
+
 class OrgUnit < ActiveRecord::Base
   include OdsModelMixin
+  include RifcsRepresentationMixin
   self.select_db
 
   self.table_name = 'org_unit'
@@ -142,17 +145,6 @@ class OrgUnit < ActiveRecord::Base
       }
     end
 
-  end
-
-  def self.to_rif
-    StaffAnonymousIdentifier.update_cache
-    doc = all.map {|i| RifCsRepresentation.new(i).to_doc}.reduce do |d, o|
-      d.root << o.root.children
-      d
-    end
-    # Ensure everything is in the same namespace
-    doc.root.children.each {|n| n.namespace = n.parent.namespace}
-    doc.to_xml
   end
 
   def to_rif

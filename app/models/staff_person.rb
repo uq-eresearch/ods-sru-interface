@@ -1,7 +1,10 @@
+require 'rifcs_registry_object_mixin'
+
 class StaffPerson < ActiveRecord::Base
   extend Forwardable
   include OdsModelMixin
   include StaffAnonymousIdentifierMixin
+  include RifcsRepresentationMixin
   self.select_db
 
   self.table_name = 'stf_person'
@@ -120,17 +123,8 @@ class StaffPerson < ActiveRecord::Base
 
   end
 
-  def self.to_rif
-    StaffAnonymousIdentifier.update_cache
-    doc = includes(:org_units).all.map do |p|
-      RifCsRepresentation.new(p).to_doc
-    end.reduce do |d, o|
-      d.root << o.root.children
-      d
-    end
-    # Ensure everything is in the same namespace
-    doc.root.children.each {|n| n.namespace = n.parent.namespace}
-    doc.to_xml
+  def self.all_with_relations
+    includes(:org_units).all
   end
 
   def to_rif
