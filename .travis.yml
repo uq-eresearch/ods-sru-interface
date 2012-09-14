@@ -1,5 +1,5 @@
 language: ruby
-bundler_args: --without development
+bundler_args: --without development oracle
 before_install:
   - sudo apt-get install -qq idzebra-2.0 yaz
 rvm:

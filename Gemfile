@@ -74,3 +74,8 @@ group :development do
   gem 'pry-rails'
   gem 'libnotify', :require => false unless RUBY_PLATFORM =~ /linux/i
 end
+
+group :oracle do
+  gem 'ruby-oci8'
+  gem 'activerecord-oracle_enhanced-adapter'
+end
