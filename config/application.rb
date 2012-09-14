@@ -40,8 +40,18 @@ class Rails::Application::Configuration
     begin
       uri = URI.parse(db_url)
 
+      scheme = \
+        case uri.scheme
+        when "postgres"
+          "postgresql"
+        when "oracle"
+          "oracle_enhanced"
+        else
+          uri.scheme
+        end
+
       return {
-        'adapter' => uri.scheme == "postgres" ? "postgresql" : uri.scheme,
+        'adapter' => scheme,
         'database' => (uri.path || "").split("/")[1],
         'username' => uri.user,
         'password' => uri.password,
