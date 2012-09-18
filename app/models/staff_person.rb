@@ -8,14 +8,22 @@ class StaffPerson < ActiveRecord::Base
   self.select_db
 
   self.table_name = 'stf_person'
+  self.primary_key = :staff_id
 
   has_many :positions,
     :class_name => 'StaffPlacement',
     :foreign_key => 'staff_id',
     :conditions => { :current_placement_flag => 'Y' }
 
+  has_many :grant_investigations,
+    :class_name => 'GrantInvestigator',
+    :foreign_key => 'staff_id'
+
   has_many :org_units,
     :through => :positions
+
+  has_many :grants,
+    :through => :grant_investigations
 
   def_delegator :anonymous_identifier, :urn, :identifier
 
