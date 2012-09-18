@@ -73,6 +73,7 @@ group :development do
   gem 'debugger'
   gem 'pry-rails'
   gem 'libnotify', :require => false unless RUBY_PLATFORM =~ /linux/i
+  gem 'ruby-prof'
 end
 
 group :oracle do

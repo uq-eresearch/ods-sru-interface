@@ -110,7 +110,10 @@ class StaffPerson < ActiveRecord::Base
 
     def related_objects(xml)
       begin
-        @person.org_units.each do |ou|
+        @person.positions.each do |p|
+          next if p.org_unit_id.nil?
+          ou = OrgUnit.new
+          ou.org_unit_id = p.org_unit_id
           xml.relatedObject {
             xml.key(ou.identifier)
             xml.relation(:type => 'isMemberOf')
@@ -125,7 +128,7 @@ class StaffPerson < ActiveRecord::Base
 
   def self.all_with_related
     StaffAnonymousIdentifier.update_cache
-    includes(:org_units).all
+    includes(:positions).all
   end
 
   def to_rif
