@@ -12,6 +12,8 @@ class Grant < ActiveRecord::Base
     :class_name => 'GrantInvestigator',
     :foreign_key => 'rm_project_code'
 
+  scope :safe, where(:confidential_flag => 'N')
+
   def project_code
     rm_project_code.gsub(/^0+/, '')
   end
@@ -95,6 +97,10 @@ class Grant < ActiveRecord::Base
       end
     end
 
+  end
+
+  def self.all_with_related
+    Grant.safe
   end
 
   def to_rif
