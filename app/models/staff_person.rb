@@ -147,7 +147,7 @@ class StaffPerson < ActiveRecord::Base
 
   def self.all_with_related
     StaffAnonymousIdentifier.update_cache
-    includes(:positions).all
+    includes(:positions).includes(:alternate_identifiers).all
   end
 
   def to_rif
