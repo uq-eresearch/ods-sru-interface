@@ -19,6 +19,10 @@ class StaffPerson < ActiveRecord::Base
     :class_name => 'GrantInvestigator',
     :foreign_key => 'staff_id'
 
+  has_many :alternate_identifiers,
+    :class_name => 'StaffAltId',
+    :foreign_key => 'staff_id'
+
   has_many :org_units,
     :through => :positions
 
@@ -57,7 +61,7 @@ class StaffPerson < ActiveRecord::Base
             xml.originatingSource group
             xml.party(:type => 'person') {
               xml.identifier(@person.identifier, :type => 'AU-QU')
-              email_identifier(xml)
+              alternate_identifiers(xml)
               primary_name(xml)
               alt_name(xml)
               email(xml)
@@ -97,6 +101,13 @@ class StaffPerson < ActiveRecord::Base
         e(xml, :namePart, 'family', @person.family_name)
         e(xml, :namePart, 'given', @person.preferred_name)
       }
+    end
+
+    def alternate_identifiers(xml)
+      email_identifier(xml)
+      @person.alternate_identifiers.each do |alt|
+        xml.identifier(alt, :type => 'uri')
+      end
     end
 
     def email_identifier(xml)

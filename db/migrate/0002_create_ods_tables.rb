@@ -49,6 +49,7 @@ class CreateOdsTables < ActiveRecord::Migration
       t.datetime "project_start_date"
       t.datetime "project_end_date"
       t.datetime "closed_off_date"
+      t.string   "grantor_reference",              :limit => 20
       t.string   "rm_proj_status_code",            :limit => 10
       t.string   "proj_status_code_alt",           :limit => 10
       t.string   "proj_status_name",               :limit => 200
@@ -152,6 +153,17 @@ class CreateOdsTables < ActiveRecord::Migration
     add_index "stf_placement",
       ["employee_no", "sort_key", "occupancy_type_code"],
       :name => "stf_placement_pk", :unique => true
+
+    create_table "stf_alt_id", :id => false, :force => true do |t|
+      t.string "staff_id",          :limit => 12, :null => false
+      t.string "type",              :limit => 20, :null => false
+      t.string "id",                :limit => 12, :null => false
+    end
+
+    add_index "stf_alt_id", ["type", "id"],
+      :name => "stf_alt_id_pk", :unique => true
+    add_index "stf_alt_id", ["staff_id"],
+      :name => "stf_alt_staff_id_fk", :unique => false
 
   end
 
