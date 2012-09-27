@@ -6,6 +6,8 @@ describe Grant do
   it "should output RIF-CS with :to_rif" do
       subject.rm_project_code = "00098773"
       subject.project_title = "Rats, Bats & Vats"
+      subject.scheme_name_primary = "ARC Discovery Projects"
+      subject.grantor_reference = "RN1234567"
 
       require 'open-uri'
       schema_location = 'http://services.ands.org.au' +
@@ -25,6 +27,10 @@ describe Grant do
       doc.at_xpath('//rif:activity', ns_decl)['type'].should == 'project'
       doc.at_xpath('//rif:identifier', ns_decl).content.should \
         match(/#{unpadded_project_code}$/)
+      doc.xpath('//rif:identifier', ns_decl).map{|n| n.content}.should \
+        == ["urn:uq-grant-code:%d" % subject.rm_project_code.to_i,
+            "http://purl.org/au-research/grants/arc/%s" %
+            subject.grantor_reference]
       doc.at_xpath('//rif:name/rif:namePart', ns_decl).content.should \
         == subject.project_title
     end

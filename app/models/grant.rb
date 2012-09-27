@@ -46,6 +46,7 @@ class Grant < ActiveRecord::Base
             xml.originatingSource group
             xml.activity(:type => 'project') {
               xml.identifier(@grant.identifier, :type => 'AU-QU')
+              grantor_identifier(xml)
               name(xml)
               related_objects(xml)
             }
@@ -68,6 +69,20 @@ class Grant < ActiveRecord::Base
       xml.name {
         xml.namePart @grant.project_title
       }
+    end
+
+    def grantor_identifier(xml)
+      uri = case @grant.scheme_name_primary
+        when /^ARC/
+          "http://purl.org/au-research/grants/arc/%s" %
+            @grant.grantor_reference
+        when /^NHMRC/
+          "http://purl.org/au-research/grants/nhmrc/%s" %
+            @grant.grantor_reference
+        else
+          nil
+        end
+      xml.identifier(uri, :type => 'uri') unless uri.nil?
     end
 
     def internal_participant_keys
