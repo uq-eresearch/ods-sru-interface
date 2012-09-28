@@ -30,6 +30,11 @@
       <xsl:value-of select="."/>
     </z:index>
   </xsl:template>
+  <xsl:template match="//rif:registryObject/rif:key">
+    <z:index name="identifier:0">
+      <xsl:value-of select="."/>
+    </z:index>
+  </xsl:template>
 
   <xsl:template match="@dateModified">
     <z:index name="datestamp:0">
