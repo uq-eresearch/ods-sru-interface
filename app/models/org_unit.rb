@@ -85,7 +85,7 @@ class OrgUnit < ActiveRecord::Base
     end
 
     def name(xml)
-      xml.name {
+      xml.name(:type => 'primary') {
         xml.namePart [
           @org_unit.unit_prefix,
           @org_unit.unit_name,

@@ -66,7 +66,7 @@ class Grant < ActiveRecord::Base
     end
 
     def name(xml)
-      xml.name {
+      xml.name(:type => 'primary') {
         xml.namePart @grant.project_title
       }
     end
