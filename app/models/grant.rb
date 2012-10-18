@@ -107,7 +107,7 @@ class Grant < ActiveRecord::Base
       (internal_participant_keys | external_participant_keys).each do |k|
         xml.relatedObject {
           xml.key(k)
-          xml.relation(:type => 'isParticipant')
+          xml.relation(:type => 'hasParticipant')
         }
       end
     end
