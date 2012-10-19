@@ -17,7 +17,7 @@ class OrgUnit < ActiveRecord::Base
     :source => :person
 
   def identifier
-    "urn:uq-org-unit:#{org_unit_id}"
+    "uq-org-unit:#{org_unit_id}"
   end
 
   def address_lines
@@ -67,7 +67,7 @@ class OrgUnit < ActiveRecord::Base
             xml.key @org_unit.identifier
             xml.originatingSource group
             xml.party(:type => 'group') {
-              xml.identifier(@org_unit.identifier, :type => 'AU-QU')
+              xml.identifier(@org_unit.identifier, :type => 'AU-QU-local')
               name(xml)
               location(xml)
             }

@@ -10,7 +10,7 @@ module StaffAnonymousIdentifierMixin
 
     def find_by_anonymous_identifier(anon_id)
       # Convert from URN if necessary
-      anon_id = anon_id.rpartition(':').last if anon_id =~ /^urn:/i
+      anon_id = anon_id.rpartition(':').last if anon_id =~ /:/
       # Find the matching identifier
       anon_ident = StaffAnonymousIdentifier.find_by_anonymous_id(anon_id)
       return nil if anon_ident.nil?

@@ -39,10 +39,9 @@ describe StaffAnonymousIdentifierMixin do
 
     staff_id = "32354"
     subject.class.should_receive(:find_by_staff_id)\
-      .with(kind_of(Array)).twice.and_return(subject)
+      .with(kind_of(Array)).once.and_return(subject)
 
     subject.class.find_by_anonymous_identifier(anon_id_1.to_s).should == subject
-    subject.class.find_by_anonymous_identifier(anon_id_1.urn).should == subject
   end
 
 end

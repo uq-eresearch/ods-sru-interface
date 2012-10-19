@@ -2,17 +2,13 @@ class StaffAnonymousIdentifier < ActiveRecord::Base
 
   @@cache = {}
 
-  URN_PREFIX = 'uq-staff-ref'
+  STRING_PREFIX = 'uq-staff-ref'
 
   attr_accessible :staff_id
   before_create :create_anonymous_id
 
   def to_s
-    anonymous_id
-  end
-
-  def urn
-    "urn:#{URN_PREFIX}:#{anonymous_id}"
+    "#{STRING_PREFIX}:#{anonymous_id}"
   end
 
   def self.cache

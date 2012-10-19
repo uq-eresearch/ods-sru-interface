@@ -25,10 +25,10 @@ describe StaffPerson do
       # Check all the relevant values are in the document
       ns_decl = {'rif' => 'http://ands.org.au/standards/rif-cs/registryObjects'}
       doc.at_xpath('//rif:key', ns_decl).content.should \
-        == subject.anonymous_identifier.urn
+        == subject.anonymous_identifier.to_s
       doc.at_xpath('//rif:party', ns_decl)['type'].should == 'person'
       doc.at_xpath('//rif:identifier', ns_decl).content.should \
-        == subject.anonymous_identifier.urn
+        == subject.anonymous_identifier.to_s
       primary_name = doc.at_xpath('//rif:name[@type="primary"]', ns_decl)
       primary_name.at_xpath('rif:namePart[@type="family"]', ns_decl)\
         .content.should == "Atkins"
@@ -71,10 +71,10 @@ describe StaffPerson do
       # Check all the relevant values are in the document
       ns_decl = {'rif' => 'http://ands.org.au/standards/rif-cs/registryObjects'}
       doc.at_xpath('//rif:key', ns_decl).content.should \
-        == subject.anonymous_identifier.urn
+        == subject.anonymous_identifier.to_s
       doc.at_xpath('//rif:party', ns_decl)['type'].should == 'person'
       doc.xpath('//rif:identifier', ns_decl).map{|n| n.content}.should \
-        == [subject.anonymous_identifier.urn,
+        == [subject.anonymous_identifier.to_s,
             'mailto:%s' % subject.email,
             subject.alternate_identifiers.first.to_s]
     end

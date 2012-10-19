@@ -19,7 +19,7 @@ class Grant < ActiveRecord::Base
   end
 
   def identifier
-    "urn:uq-grant-code:#{project_code}"
+    "uq-grant-code:#{project_code}"
   end
 
   class RifCsRepresentation
@@ -45,7 +45,7 @@ class Grant < ActiveRecord::Base
             xml.key @grant.identifier
             xml.originatingSource group
             xml.activity(:type => 'project') {
-              xml.identifier(@grant.identifier, :type => 'AU-QU')
+              xml.identifier(@grant.identifier, :type => 'AU-QU-local')
               grantor_identifier(xml)
               name(xml)
               related_objects(xml)

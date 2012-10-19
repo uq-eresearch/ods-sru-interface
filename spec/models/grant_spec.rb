@@ -28,7 +28,7 @@ describe Grant do
       doc.at_xpath('//rif:identifier', ns_decl).content.should \
         match(/#{unpadded_project_code}$/)
       doc.xpath('//rif:identifier', ns_decl).map{|n| n.content}.should \
-        == ["urn:uq-grant-code:%d" % subject.rm_project_code.to_i,
+        == ["uq-grant-code:%d" % subject.rm_project_code.to_i,
             "http://purl.org/au-research/grants/arc/%s" %
             subject.grantor_reference]
       doc.at_xpath('//rif:name/rif:namePart', ns_decl).content.should \

@@ -4,11 +4,11 @@ describe StaffAnonymousIdentifier do
 
   subject { StaffAnonymousIdentifier.create(:staff_id => '1234') }
 
-  it { should respond_to(:staff_id, :to_s, :urn) }
+  it { should respond_to(:staff_id, :to_s) }
 
-  it "should produce a valid URN" do
+  it "should produce a string identifier" do
     StaffAnonymousIdentifier.create(:staff_id => '1234')
-    subject.urn.should match(/^urn:#{StaffAnonymousIdentifier::URN_PREFIX}:/i)
+    subject.to_s.should match(/^#{StaffAnonymousIdentifier::STRING_PREFIX}:/i)
   end
 
 end

@@ -29,7 +29,7 @@ class StaffPerson < ActiveRecord::Base
   has_many :grants,
     :through => :grant_investigations
 
-  def_delegator :anonymous_identifier, :urn, :identifier
+  def_delegator :anonymous_identifier, :to_s, :identifier
 
   alias_attribute :family_name, :last_name_mixed
 
@@ -60,7 +60,7 @@ class StaffPerson < ActiveRecord::Base
             xml.key @person.identifier
             xml.originatingSource group
             xml.party(:type => 'person') {
-              xml.identifier(@person.identifier, :type => 'AU-QU')
+              xml.identifier(@person.identifier, :type => 'AU-QU-local')
               alternate_identifiers(xml)
               primary_name(xml)
               alt_name(xml)

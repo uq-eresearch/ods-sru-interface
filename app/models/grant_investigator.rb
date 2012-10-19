@@ -26,7 +26,7 @@ class GrantInvestigator < ActiveRecord::Base
   def_delegator :self, :surname, :family_name
 
   def key
-    "urn:uq-grant-investigator:%s" % rm_person_code
+    "uq-grant-investigator:%s" % rm_person_code
   end
 
   def given_names
