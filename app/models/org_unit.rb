@@ -70,6 +70,7 @@ class OrgUnit < ActiveRecord::Base
               xml.identifier(@org_unit.identifier, :type => 'AU-QU-local')
               name(xml)
               location(xml)
+              parent_relation(xml)
             }
           }
         }
@@ -143,6 +144,17 @@ class OrgUnit < ActiveRecord::Base
           xml.value value
         }
       }
+    end
+
+    def parent_relation(xml)
+      xml.relatedObject {
+        xml.key(university_uri_identifier)
+        xml.relation(:type => 'isPartOf')
+      }
+    end
+
+    def university_uri_identifier
+      ENV['UNIVERSITY_URI_IDENTIFIER'] || 'http://uq.edu.au/'
     end
 
   end

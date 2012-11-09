@@ -30,6 +30,8 @@ describe OrgUnit do
   end
 
   it "should output RIF-CS with :to_rif" do
+    ENV['UNIVERSITY_URI_IDENTIFIER'] = 'http://example.edu/'
+
     subject.unit_prefix = "Office of the"
     subject.unit_name = "Pro-Vice-Chancellor"
     subject.unit_suffix = nil
@@ -79,6 +81,9 @@ describe OrgUnit do
     doc.at_xpath(
       '//rif:location/rif:address/rif:electronic[@type="email"]/rif:value',
       ns_decl).content.should == subject.email
+    doc.at_xpath(
+      '//rif:relatedObject[rif:relation/@type="isPartOf"]/rif:key',
+      ns_decl).content.should == 'http://example.edu/'
   end
 
 end

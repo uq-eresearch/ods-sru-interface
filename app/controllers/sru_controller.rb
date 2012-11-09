@@ -16,7 +16,9 @@ class SruController < ApplicationController
       end while resp.kind_of?(Net::HTTPContinue)
       resp.reading_body(unix_socket, req.response_body_permitted?) { }
     ensure
-      unix_socket.close if unix_socket.respond_to?(:close)
+      if unix_socket.respond_to?(:close) and not unix_socket.closed?
+        unix_socket.close
+      end
     end
     render :text => resp.body,
       :status => resp.code.to_i,
