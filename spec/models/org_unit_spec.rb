@@ -60,8 +60,9 @@ describe OrgUnit do
     ns_decl = { 'rif' => 'http://ands.org.au/standards/rif-cs/registryObjects' }
     doc.at_xpath('//rif:key', ns_decl).content.should \
       match(/#{subject.org_unit_id}$/)
-    doc.at_xpath('//rif:identifier', ns_decl).content.should \
-      match(/#{subject.org_unit_id}$/)
+    identifiers = doc.xpath('//rif:identifier', ns_decl).map &:content
+    identifiers.detect{|i| i =~ /#{subject.org_unit_id}$/}.should_not be_nil
+    identifiers.should include(subject.unit_url)
     doc.at_xpath('//rif:party', ns_decl)['type'].should == 'group'
     doc.at_xpath('//rif:name/rif:namePart', ns_decl).content.should \
       == "Office of the Pro-Vice-Chancellor"
