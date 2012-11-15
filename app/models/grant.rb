@@ -95,16 +95,8 @@ class Grant < ActiveRecord::Base
       end
     end
 
-    def external_participant_keys
-      begin
-        @grant.investigators.external.map { |i| i.key }
-      rescue ActiveRecord::UnknownPrimaryKey
-        []
-      end
-    end
-
     def related_objects(xml)
-      (internal_participant_keys | external_participant_keys).each do |k|
+      internal_participant_keys.each do |k|
         xml.relatedObject {
           xml.key(k)
           xml.relation(:type => 'hasParticipant')
