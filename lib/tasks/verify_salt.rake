@@ -24,6 +24,7 @@ task :verify_salt do
     algo = OpenSSL::Digest::SHA1.new
   rescue LoadError
     STDERR.puts "Using Ruby SHA1."
+    algo = Digest::SHA1.new
   end
 
   at_exit do

@@ -1,19 +1,17 @@
 # encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
-# incrementally modify your database, and then regenerate this schema
-# definition.
+# incrementally modify your database, and then regenerate this schema definition.
 #
 # Note that this schema.rb definition is the authoritative source for your
 # database schema. If you need to create the application database on another
 # system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more
-# migrations you'll amass, the slower it'll run and the greater likelihood for
-# issues).
+# from scratch. The latter is a flawed and unsustainable approach (the more migrations
+# you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120830041023) do
+ActiveRecord::Schema.define(:version => 20121205062255) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -29,8 +27,7 @@ ActiveRecord::Schema.define(:version => 20120830041023) do
     t.datetime "updated_at",                :null => false
   end
 
-  add_index "delayed_jobs", ["priority", "run_at"],
-    :name => "delayed_jobs_priority"
+  add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "grt_investigator", :id => false, :force => true do |t|
     t.string  "rm_project_code",    :limit => 10,  :null => false
@@ -56,10 +53,8 @@ ActiveRecord::Schema.define(:version => 20120830041023) do
     t.string  "ext_org_abbrev",     :limit => 20
   end
 
-  add_index "grt_investigator", ["rm_project_code", "rm_person_code"],
-    :name => "grt_investigator_pk", :unique => true
-  add_index "grt_investigator", ["rm_project_code"],
-    :name => "fki_grt_investigator_rm_project_code"
+  add_index "grt_investigator", ["rm_project_code", "rm_person_code"], :name => "grt_investigator_pk", :unique => true
+  add_index "grt_investigator", ["rm_project_code"], :name => "fki_grt_investigator_rm_project_code"
 
   create_table "grt_project", :id => false, :force => true do |t|
     t.string   "rm_project_code",                :limit => 10,  :null => false
@@ -103,8 +98,7 @@ ActiveRecord::Schema.define(:version => 20120830041023) do
     t.string   "funding_class_name",             :limit => 200
   end
 
-  add_index "grt_project", ["rm_project_code"],
-    :name => "grt_project_pk", :unique => true
+  add_index "grt_project", ["rm_project_code"], :name => "grt_project_pk", :unique => true
 
   create_table "org_unit", :id => false, :force => true do |t|
     t.integer  "org_unit_id",       :limit => 8,   :null => false
@@ -128,14 +122,13 @@ ActiveRecord::Schema.define(:version => 20120830041023) do
     t.string   "unit_leader_title", :limit => 100
   end
 
-  add_index "org_unit", ["org_unit_id"],
-    :name => "org_unit_pk", :unique => true
+  add_index "org_unit", ["org_unit_id"], :name => "org_unit_pk", :unique => true
 
   create_table "staff_anonymous_identifiers", :force => true do |t|
-    t.string   "staff_id",     :limit => 12, :null => false
-    t.string   "anonymous_id", :limit => 32, :null => false
-    t.datetime "created_at",                 :null => false
-    t.datetime "updated_at",                 :null => false
+    t.string   "staff_id",     :limit => 12,                 :null => false
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
+    t.string   "anonymous_id", :limit => 40, :default => "", :null => false
   end
 
   create_table "stf_person", :id => false, :force => true do |t|
@@ -154,13 +147,12 @@ ActiveRecord::Schema.define(:version => 20120830041023) do
     t.string "email"
   end
 
-  add_index "stf_person", ["staff_id"],
-    :name => "stf_person_pk", :unique => true
+  add_index "stf_person", ["staff_id"], :name => "stf_person_pk", :unique => true
 
   create_table "stf_placement", :id => false, :force => true do |t|
-    t.string   "employee_no",             :limit => 12, :null => false
-    t.string   "sort_key",                :limit => 8,  :null => false
-    t.string   "occupancy_type_code",     :limit => 7,  :null => false
+    t.string   "employee_no",             :limit => 12,                               :null => false
+    t.string   "sort_key",                :limit => 8,                                :null => false
+    t.string   "occupancy_type_code",     :limit => 7,                                :null => false
     t.string   "staff_id",                :limit => 12
     t.string   "movement_code",           :limit => 6
     t.datetime "start_date"
@@ -175,10 +167,9 @@ ActiveRecord::Schema.define(:version => 20120830041023) do
     t.string   "reporting_category_code", :limit => 6
     t.string   "placement_title",         :limit => 35
     t.string   "job_code",                :limit => 6
-    t.decimal  "current_fte",             :precision => 3, :scale => 2
+    t.decimal  "current_fte",                           :precision => 3, :scale => 2
   end
 
-  add_index "stf_placement", ["employee_no", "sort_key", "occupancy_type_code"],
-    :name => "stf_placement_pk", :unique => true
+  add_index "stf_placement", ["employee_no", "sort_key", "occupancy_type_code"], :name => "stf_placement_pk", :unique => true
 
 end

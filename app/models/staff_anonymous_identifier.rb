@@ -22,10 +22,19 @@ class StaffAnonymousIdentifier < ActiveRecord::Base
   private
 
   def create_anonymous_id
-    while (random_hex = SecureRandom.hex(16))
-      break if StaffAnonymousIdentifier.find_by_anonymous_id(random_hex).nil?
+    digest = sha1_algo
+    digest << staff_id
+    digest << ENV['STAFF_ID_SALT']
+    self.anonymous_id = digest.hexdigest
+  end
+
+  def sha1_algo
+    begin
+      require 'openssl'
+      algo = OpenSSL::Digest::SHA1.new
+    rescue LoadError
+      algo = Digest::SHA1.new
     end
-    self.anonymous_id = random_hex
   end
 
 end

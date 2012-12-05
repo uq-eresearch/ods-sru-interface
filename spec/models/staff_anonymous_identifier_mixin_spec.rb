@@ -21,15 +21,15 @@ describe StaffAnonymousIdentifierMixin do
     anon_id_2 = subject.anonymous_identifier.to_s
 
     # Test basic uniqueness
-    anon_id_1.should_not == anon_id_2
+    anon_id_1.should_not be == anon_id_2
 
     # Test that it's reproducable
     subject.staff_id = "32354"
-    subject.anonymous_identifier.to_s.should == anon_id_1
+    subject.anonymous_identifier.to_s.should be == anon_id_1
     subject.staff_id = "0032354"
-    subject.anonymous_identifier.to_s.should == anon_id_1
+    subject.anonymous_identifier.to_s.should be == anon_id_1
     subject.staff_id = "21342"
-    subject.anonymous_identifier.to_s.should == anon_id_2
+    subject.anonymous_identifier.to_s.should be == anon_id_2
   end
 
   it "should allow objects to be found using the identifier" do
