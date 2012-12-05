@@ -45,6 +45,7 @@ gem 'pg'
 gem 'realrand' # For generating secret token
 gem 'equivalent-xml'
 gem 'sanitize' # For stripping out HTML
+gem 'bloomfilter-rb' # Needed for ID salt verification
 
 gem 'twitter-bootstrap-rails'
 gem 'haml-rails'
