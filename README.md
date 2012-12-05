@@ -16,6 +16,7 @@ The database connection is provided by the `DATABASE_URL` environment variable.
 
 Take advantage of Foreman's `.env` file:
 
+    echo "STAFF_ID_SALT=verysecretstringtocreatestaffrefs" >> .env
     echo "DATABASE_URL=postgres:///my_db" > .env
     echo "ODS_DATABASE_URL=oracle://<path_to_ods_db>" >> .env
 
