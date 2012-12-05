@@ -1,3 +1,5 @@
+ENV['STAFF_ID_SALT'] = 'A salt just for unit tests.'
+
 OdsSruInterface::Application.configure do
   # Settings specified here will take precedence over those in
   # config/application.rb

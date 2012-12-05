@@ -1,6 +1,5 @@
 require 'bundler/setup'
 require 'clockwork'
-require 'delayed_job_active_record'
 
 Dir.mkdir('tmp/data') rescue nil
 

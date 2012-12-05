@@ -34,7 +34,6 @@ gem 'unicorn'
 # gem 'capistrano'
 
 gem 'activerecord'
-gem 'delayed_job_active_record'
 gem 'rake'
 gem 'libxml-ruby'
 gem 'nokogiri'
