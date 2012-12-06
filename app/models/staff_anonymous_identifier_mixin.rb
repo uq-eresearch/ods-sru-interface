@@ -24,11 +24,7 @@ module StaffAnonymousIdentifierMixin
     end
 
     def anon_id_by_staff_id(staff_id)
-      if StaffAnonymousIdentifier.cache.key?(staff_id)
-        StaffAnonymousIdentifier.cache[staff_id]
-      else
-        StaffAnonymousIdentifier.find_or_create_by_staff_id(staff_id)
-      end
+      StaffAnonymousIdentifier.find_or_create_by_staff_id(staff_id)
     end
 
   end

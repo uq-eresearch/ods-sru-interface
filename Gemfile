@@ -34,6 +34,7 @@ gem 'unicorn'
 # gem 'capistrano'
 
 gem 'activerecord'
+gem 'redis' # Use redis as a compromise between in-memory & RDBMS for anon IDs
 gem 'rake'
 gem 'libxml-ruby'
 gem 'nokogiri'
@@ -61,6 +62,7 @@ group :test, :development do
   gem 'spork' # For running a test server (and spec_helper.rb refers to it)
   gem 'brakeman' # For security testing
   gem 'vcr' # For playing back remote service tests
+  gem 'mock_redis' # Because we don't want to use redis during unit tests
 end
 
 group :development do

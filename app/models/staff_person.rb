@@ -146,13 +146,11 @@ class StaffPerson < ActiveRecord::Base
   end
 
   def self.all_with_related
-    StaffAnonymousIdentifier.update_cache
     includes(:positions).includes(:alternate_identifiers).all
   end
 
   def to_rif
     RifCsRepresentation.new(self).to_s
   end
-
 
 end
