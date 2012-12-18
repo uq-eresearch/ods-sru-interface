@@ -35,6 +35,10 @@ class StaffPerson < ActiveRecord::Base
 
   alias_attribute :family_name, :last_name_mixed
 
+  def self.identifier(staff_id)
+    anon_id_by_staff_id(staff_id).to_s
+  end
+
   def given_names
     first_names.split(/\s+/)
   end
@@ -155,14 +159,12 @@ class StaffPerson < ActiveRecord::Base
 
   def self.all_with_related
     alt_ids = StaffAltId.all.each_with_object({}) do |altId, h|
-      h[altId.staff_id] ||= []
-      h[altId.staff_id] << altId.to_s
+      (h[altId.staff_id] ||= []) << altId.to_s
     end
     placements = StaffPlacement.where(:current_placement_flag => 'Y')\
       .select([:staff_id, :org_unit_id])\
       .each_with_object({}) do |placement, h|
-      h[placement.staff_id] ||= []
-      h[placement.staff_id] << placement.org_unit_id
+      (h[placement.staff_id] ||= []) << placement.org_unit_id
     end
     all.map do |sp|
       sp.cached_alt_ids = alt_ids[sp.staff_id] || []

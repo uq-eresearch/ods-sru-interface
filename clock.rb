@@ -11,8 +11,8 @@ module Clockwork
       if use_bulk and model.respond_to?(:to_rif)
         repo.add_record(model.to_rif)
       else
-        # While slower than generating a single document, the
-        # memory requirements are much less troublesome for a small VM.
+        # While much slower than generating a single document, the
+        # memory requirements can be less troublesome for a small VM.
         model.all.each do |obj|
           repo.add_record(obj.to_rif)
         end
@@ -23,13 +23,7 @@ module Clockwork
   end
 
   every(6.hours, 'output.orgunits') do
-    update_sru_records(OrgUnit, true)
-  end
-
-  every(12.hours, 'output.records') do
-    [StaffPerson, Grant, GrantInvestigator].each do |model|
-      update_sru_records(model)
-    end
+    [OrgUnit, StaffPerson, Grant].each {|m| update_sru_records(m, true)}
   end
 
 end

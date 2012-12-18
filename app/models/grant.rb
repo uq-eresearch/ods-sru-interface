@@ -14,12 +14,24 @@ class Grant < ActiveRecord::Base
 
   scope :safe, where(:confidential_flag => 'N')
 
+  attr_accessor :cached_internal_participant_ids
+
   def project_code
     rm_project_code.gsub(/^0+/, '')
   end
 
   def identifier
     "uq-grant-code:#{project_code}"
+  end
+
+  def internal_participant_keys
+    (cached_internal_participant_ids || begin
+      investigators.internal.map do |i|
+        i.staff_id
+      end.compact
+    rescue ActiveRecord::UnknownPrimaryKey
+      []
+    end).map{|i| StaffPerson.identifier i}
   end
 
   class RifCsRepresentation
@@ -85,18 +97,8 @@ class Grant < ActiveRecord::Base
       xml.identifier(uri, :type => 'uri') unless uri.nil?
     end
 
-    def internal_participant_keys
-      begin
-        @grant.investigators.internal.map do |i|
-          i.staff_person.identifier
-        end.compact
-      rescue ActiveRecord::UnknownPrimaryKey
-        []
-      end
-    end
-
     def related_objects(xml)
-      internal_participant_keys.each do |k|
+      @grant.internal_participant_keys.each do |k|
         xml.relatedObject {
           xml.key(k)
           xml.relation(:type => 'hasParticipant')
@@ -107,7 +109,15 @@ class Grant < ActiveRecord::Base
   end
 
   def self.all_with_related
-    Grant.safe
+    staff = GrantInvestigator.internal
+      .select([:rm_project_code, "#{GrantInvestigator.table_name}.staff_id"])
+      .each_with_object({}) do |investigator, h|
+      (h[investigator.rm_project_code] ||= []) << investigator.staff_id
+    end
+    Grant.all.map do |grant|
+      grant.cached_internal_participant_ids = staff[grant.rm_project_code] || []
+      grant
+    end
   end
 
   def to_rif
