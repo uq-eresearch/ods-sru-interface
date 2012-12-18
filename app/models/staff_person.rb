@@ -31,10 +31,20 @@ class StaffPerson < ActiveRecord::Base
 
   def_delegator :anonymous_identifier, :to_s, :identifier
 
+  attr_accessor :cached_org_unit_ids, :cached_alt_ids
+
   alias_attribute :family_name, :last_name_mixed
 
   def given_names
     first_names.split(/\s+/)
+  end
+
+  def alt_ids
+    cached_alt_ids || alternate_identifiers.map(&:to_s)
+  end
+
+  def org_unit_ids
+    cached_org_unit_ids || positions.pluck(:org_unit_id)
   end
 
   class RifCsRepresentation
@@ -105,14 +115,14 @@ class StaffPerson < ActiveRecord::Base
 
     def alternate_identifiers(xml)
       email_identifier(xml)
-      @person.alternate_identifiers.each do |alt|
+      @person.alt_ids.each do |alt|
         xml.identifier(alt, :type => 'uri')
       end
     end
 
     def email_identifier(xml)
       return if @person.email.nil?
-      xml.identifier('mailto:%s' % @person.email, :type => 'uri')
+      xml.identifier("mailto:#{@person.email}", :type => 'uri')
     end
 
     def email(xml)
@@ -129,12 +139,10 @@ class StaffPerson < ActiveRecord::Base
 
     def related_objects(xml)
       begin
-        @person.positions.each do |p|
-          next if p.org_unit_id.nil?
-          ou = OrgUnit.new
-          ou.org_unit_id = p.org_unit_id
+        @person.org_unit_ids.each do |org_unit_id|
+          next if org_unit_id.nil?
           xml.relatedObject {
-            xml.key(ou.identifier)
+            xml.key(OrgUnit.identifier org_unit_id)
             xml.relation(:type => 'isMemberOf')
           }
         end
@@ -146,7 +154,21 @@ class StaffPerson < ActiveRecord::Base
   end
 
   def self.all_with_related
-    includes(:positions).includes(:alternate_identifiers).all
+    alt_ids = StaffAltId.all.each_with_object({}) do |altId, h|
+      h[altId.staff_id] ||= []
+      h[altId.staff_id] << altId.to_s
+    end
+    placements = StaffPlacement.where(:current_placement_flag => 'Y')\
+      .select([:staff_id, :org_unit_id])\
+      .each_with_object({}) do |placement, h|
+      h[placement.staff_id] ||= []
+      h[placement.staff_id] << placement.org_unit_id
+    end
+    all.map do |sp|
+      sp.cached_alt_ids = alt_ids[sp.staff_id] || []
+      sp.cached_org_unit_ids = placements[sp.staff_id] || []
+      sp
+    end
   end
 
   def to_rif

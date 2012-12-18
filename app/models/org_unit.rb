@@ -16,8 +16,12 @@ class OrgUnit < ActiveRecord::Base
     :through => :staff_positions,
     :source => :person
 
-  def identifier
+  def self.identifier(org_unit_id)
     "uq-org-unit:#{org_unit_id}"
+  end
+
+  def identifier
+    self.class.identifier org_unit_id
   end
 
   def address_lines
