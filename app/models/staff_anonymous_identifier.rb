@@ -7,6 +7,7 @@ class StaffAnonymousIdentifier < Struct.new(:staff_id, :anonymous_id)
     "#{STRING_PREFIX}:#{anonymous_id}"
   end
 
+  # Class Methods
   class << self
 
     def find_by_anonymous_id(anonymous_id)
@@ -19,7 +20,7 @@ class StaffAnonymousIdentifier < Struct.new(:staff_id, :anonymous_id)
     end
 
     def generate_anonymous_id(staff_id)
-      digest = sha1_algo
+      digest = sha1_algo.new
       digest << staff_id
       digest << ENV['STAFF_ID_SALT']
       digest.hexdigest
@@ -47,11 +48,11 @@ class StaffAnonymousIdentifier < Struct.new(:staff_id, :anonymous_id)
     end
 
     def sha1_algo
-      begin
+      @algo ||= begin
         require 'openssl'
-        algo = OpenSSL::Digest::SHA1.new
+        OpenSSL::Digest::SHA1
       rescue LoadError
-        algo = Digest::SHA1.new
+        Digest::SHA1
       end
     end
   end
