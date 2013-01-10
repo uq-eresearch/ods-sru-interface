@@ -30,6 +30,7 @@ task :verify_salt do
   at_exit do
     @db.close
     @bf.stats
+    unlink('hash_test.db')
   end
 
   trap('INT') do

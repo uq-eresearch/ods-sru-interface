@@ -1,4 +1,6 @@
-require 'rifcs_registry_object_mixin'
+require_relative 'ods_model_mixin'
+require_relative 'staff_anonymous_identifier_mixin'
+require_relative 'rifcs_registry_object_mixin'
 
 class StaffPerson < ActiveRecord::Base
   extend Forwardable

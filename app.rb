@@ -1,10 +1,18 @@
-class SruController < ApplicationController
+abort "Env variable STAFF_ID_SALT is missing!" unless ENV.key? 'STAFF_ID_SALT'
 
-  def proxy
+Bundler.setup
+require 'sinatra'
+
+class App < Sinatra::Application
+
+  get '/' do
+    haml :index
+  end
+
+  get '/sru' do
     resp = proxy_query_to_socket(request.query_string)
-    render :text => resp.body,
-      :status => resp.code.to_i,
-      :content_type => resp.content_type
+    content_type resp.content_type
+    [resp.code.to_i, resp.body]
   end
 
   private
@@ -29,7 +37,22 @@ class SruController < ApplicationController
         unix_socket.close
       end
     end
-    return resp
+    resp
   end
 
 end
+
+__END__
+@@ layout
+%html
+  %head
+    %title ODS SRU Interface
+  %body
+    =yield
+
+@@ index
+%h1
+  ODS SRU Lookup Interface
+%p
+  You're probably looking for the
+  %a{:href => '/sru'} SRU Interface.

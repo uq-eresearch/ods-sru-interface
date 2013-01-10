@@ -22,7 +22,7 @@ class StaffAnonymousIdentifier < Struct.new(:staff_id, :anonymous_id)
     def generate_anonymous_id(staff_id)
       digest = sha1_algo.new
       digest << staff_id
-      digest << ENV['STAFF_ID_SALT']
+      digest << staff_id_salt
       digest.hexdigest
     end
 
@@ -38,11 +38,17 @@ class StaffAnonymousIdentifier < Struct.new(:staff_id, :anonymous_id)
       new(staff_id, anonymous_id)
     end
 
+    def staff_id_salt
+      ENV['STAFF_ID_SALT']
+    end
+
     def redis
-      @@redis ||= case Rails.env
-        when 'test'
+      @@redis ||= case staff_id_salt
+        when 'test_environment_salt'
+          require 'mock_redis'
           MockRedis.new
         else
+          require 'redis'
           Redis.new(:path => "./tmp/redis.sock")
         end
     end
