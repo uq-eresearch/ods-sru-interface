@@ -24,6 +24,8 @@ Bluepill.application("<%= app %>", :foreground => false, :log_file => "/var/log/
         else
           cmd.sub!(/^bundle/, `which bundle`.chomp)
         end
+      else
+        cmd.sub!(/^(\S+)/) { `which #{$1}`.chomp }
       end
       cmd.sub!(/\$PORT/, port.to_s)
     %>
