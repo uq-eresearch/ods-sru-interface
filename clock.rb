@@ -13,6 +13,10 @@ Dir[File.join(File.dirname(__FILE__), 'models', '*.rb')].each {|f| require f}
 
 Dir.mkdir('tmp/data') rescue nil
 
+# Set home correctly, as Zebra config needs it
+require 'etc'
+ENV['HOME'] = Etc.getpwuid.dir
+
 module Clockwork
 
   def update_sru_records(model, use_bulk = false)
