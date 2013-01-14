@@ -15,6 +15,7 @@ gem 'clockwork'
 gem 'equivalent-xml'
 gem 'sanitize' # For stripping out HTML
 gem 'bloomfilter-rb' # Needed for ID salt verification
+gem 'haml' # Templating
 
 gem 'idzebra', '>= 0.2.0'
 
