@@ -16,7 +16,7 @@ gem 'equivalent-xml'
 gem 'sanitize' # For stripping out HTML
 gem 'bloomfilter-rb' # Needed for ID salt verification
 
-gem 'idzebra', '>= 0.1.1'
+gem 'idzebra', '>= 0.2.0'
 
 group :test do
   gem 'rack-test'
