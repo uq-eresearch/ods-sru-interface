@@ -18,7 +18,7 @@ At UQ, this is queried by [Miletus][miletus], which acts as our institutional me
 
 The ODS database connection is provided by the `ODS_DATABASE_URL` environment variable.
 
-Take advantage of Foreman's `.env` file:
+Take advantage of [Foreman][foreman]'s `.env` file:
 
     echo "STAFF_ID_SALT=verysecretstringtocreatestaffrefs" >> .env
     echo "ODS_DATABASE_URL=oracle://<path_to_ods_db>" >> .env
@@ -141,11 +141,16 @@ Unicorn is best run behind a general-purposed web-server to protect it from inco
 
     }
 
+## Licence
+
+This software is licensed under the Simplified (2-clause) BSD license. See `COPYING` for details.
+
 ## Acknowledgements
 
 This app was produced as a result of an [ANDS-funded](http://www.ands.org.au/) project.
 
 [bluepill]: https://github.com/arya/bluepill
+[foreman]: http://ddollar.github.com/foreman/
 [idzebra]: https://www.indexdata.com/zebra
 [miletus]: https://github.com/uq-eresearch/miletus
 [oracleinstantclient]: http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html
