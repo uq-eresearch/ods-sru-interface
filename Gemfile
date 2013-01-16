@@ -38,6 +38,7 @@ group :development do
   gem 'guard-rspec'
   gem 'debugger'
   gem 'libnotify', :require => false unless RUBY_PLATFORM =~ /linux/i
+  gem 'pry'
   gem 'ruby-prof'
   gem 'shotgun'
 end
