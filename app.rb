@@ -1,4 +1,7 @@
-abort "Env variable STAFF_ID_SALT is missing!" unless ENV.key? 'STAFF_ID_SALT'
+# Check we have a staff ID secret, because otherwise we don't have anonymous IDs
+unless ENV.key? 'STAFF_ID_SECRET'
+  abort "Env variable STAFF_ID_SECRET is missing!"
+end
 
 Bundler.setup
 require 'sinatra'

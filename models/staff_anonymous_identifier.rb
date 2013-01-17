@@ -1,3 +1,5 @@
+require 'openssl'
+
 class StaffAnonymousIdentifier < Struct.new(:staff_id, :anonymous_id)
 
   STRING_PREFIX = 'uq-staff-ref'
@@ -20,10 +22,7 @@ class StaffAnonymousIdentifier < Struct.new(:staff_id, :anonymous_id)
     end
 
     def generate_anonymous_id(staff_id)
-      digest = sha1_algo.new
-      digest << staff_id
-      digest << staff_id_salt
-      digest.hexdigest
+      OpenSSL::HMAC.hexdigest('SHA1', secret, staff_id)
     end
 
     private
@@ -38,13 +37,13 @@ class StaffAnonymousIdentifier < Struct.new(:staff_id, :anonymous_id)
       new(staff_id, anonymous_id)
     end
 
-    def staff_id_salt
-      ENV['STAFF_ID_SALT']
+    def secret
+      ENV['STAFF_ID_SECRET']
     end
 
     def redis
-      @@redis ||= case staff_id_salt
-        when 'test_environment_salt'
+      @@redis ||= case secret
+        when 'test_environment_secret'
           require 'mock_redis'
           MockRedis.new
         else
@@ -53,14 +52,6 @@ class StaffAnonymousIdentifier < Struct.new(:staff_id, :anonymous_id)
         end
     end
 
-    def sha1_algo
-      @algo ||= begin
-        require 'openssl'
-        OpenSSL::Digest::SHA1
-      rescue LoadError
-        Digest::SHA1
-      end
-    end
   end
 
 end

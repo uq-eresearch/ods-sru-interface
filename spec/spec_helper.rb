@@ -49,7 +49,7 @@ Spork.prefork do
 
   end
 
-  ENV['STAFF_ID_SALT'] = 'test_environment_salt'
+  ENV['STAFF_ID_SECRET'] = 'test_environment_secret'
 end
 
 Spork.each_run do

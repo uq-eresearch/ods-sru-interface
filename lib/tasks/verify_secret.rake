@@ -1,11 +1,13 @@
-desc 'Checks salt will always generate a unique ID in the Staff ID range.'
-task :verify_salt do
+desc 'Checks secret will always generate a unique ID in the Staff ID range.'
+task :verify_secret do
   require 'dbm'
   require 'bloomfilter-rb'
   require 'digest'
 
-  abort "Env variable STAFF_ID_SALT is missing!" unless ENV.key? 'STAFF_ID_SALT'
-  secret = ENV['STAFF_ID_SALT']
+  unless ENV.key? 'STAFF_ID_SECRET'
+    abort "Env variable STAFF_ID_SECRET is missing!"
+  end
+  secret = ENV['STAFF_ID_SECRET']
   @count = 0
 
   def all_staff_ids
@@ -18,19 +20,14 @@ task :verify_salt do
   LOOKUP_DB = 'hash_test'
   @db = DBM.new(LOOKUP_DB, 600, DBM::NEWDB)
 
-  begin
-    require 'openssl'
-    STDERR.puts "Using OpenSSL SHA1."
-    algo = OpenSSL::Digest::SHA1.new
-  rescue LoadError
-    STDERR.puts "Using Ruby SHA1."
-    algo = Digest::SHA1.new
-  end
+  require 'openssl'
+  STDERR.puts "Using OpenSSL HMAC SHA1."
+  algo = OpenSSL::HMAC.new(secret, 'SHA1')
 
   at_exit do
     @db.close
     @bf.stats
-    unlink('hash_test.db')
+    File.unlink('hash_test.db')
   end
 
   trap('INT') do
@@ -61,7 +58,6 @@ task :verify_salt do
 
   all_staff_ids do |id|
     algo << id
-    algo << secret
     hash = algo.hexdigest
     algo.reset
     raise StopIteration unless new? hash

@@ -7,7 +7,7 @@
 
 ## Overview
 
-The [UQ][uq] Operational Data Store (ODS) is the source of most of UQ's staff and grant data. Unfortunately, 
+The [UQ][uq] Operational Data Store (ODS) is the source of most of UQ's staff and grant data. Unfortunately,
 the provided connection to a Oracle database is not a particularly portable method for exposing the data.
 
 This ([Sinatra][sinatra]) app provides a [SRU][sru]/[RIF-CS][rifcs] interface over a database connection. While the table formats will be unlikely to match your own situation, the overall struction may be easy to modify for other university databases.
@@ -16,11 +16,11 @@ At UQ, this is queried by [Miletus][miletus], which acts as our institutional me
 
 ## Usage
 
-The ODS database connection is provided by the `ODS_DATABASE_URL` environment variable.
+The ODS database connection is provided by the `ODS_DATABASE_URL` environment variable. You will also need to set a `STAFF_ID_SECRET`, which is used to generate HMAC-SHA1 anonymous IDs from your staff IDs.
 
 Take advantage of [Foreman][foreman]'s `.env` file:
 
-    echo "STAFF_ID_SALT=verysecretstringtocreatestaffrefs" >> .env
+    echo "STAFF_ID_SECRET=verysecretstringtocreatestaffrefs" >> .env
     echo "ODS_DATABASE_URL=oracle://<path_to_ods_db>" >> .env
 
 To run Rake tasks adhoc:
@@ -30,7 +30,7 @@ To run Rake tasks adhoc:
 Or to run the whole lot:
 
     foreman start
-    
+
 You also export a [bluepill][bluepill] script and run it as a system service.
 
 ```shell
@@ -44,7 +44,7 @@ mv /tmp/odssru.pill /etc/bluepill/
 cp ~odssru/code/foreman/odssru-bluepill.init /etc/init.d/odssru
 # Start the service
 service odssru start
-```    
+```
 
 ## Dependencies
 

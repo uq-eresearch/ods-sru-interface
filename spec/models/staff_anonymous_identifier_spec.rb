@@ -11,13 +11,9 @@ describe StaffAnonymousIdentifier do
     subject.to_s.should end_with subject.anonymous_id
   end
 
-  it "should generate anonymous IDs from the STAFF_ID_SALT" do
-    subject.anonymous_id.should match(/^[0-9a-f]{40}$/)
-    require 'digest'
-    sha1 = Digest::SHA1.new
-    sha1 << subject.staff_id
-    sha1 << ENV['STAFF_ID_SALT']
-    subject.anonymous_id.should be == sha1.hexdigest
+  it "should use HMAC-SHA1 and ENV['STAFF_ID_SECRET'] to generate identifier" do
+    # Secret is from spec_helper.rb, and staff ID is 1234
+    subject.to_s.should match(/2d0860ea3fff139770182c0d71de7f4de9dfccf6$/)
   end
 
 end

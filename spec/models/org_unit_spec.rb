@@ -13,16 +13,16 @@ describe OrgUnit do
     subject.main_address_4 = "11 Salisbury Road, Ipswich, Qld, 4305"
 
     subject.address_lines.tap do |a|
-      a[0].should == subject.main_address_1
-      a[1].should == subject.main_address_2
-      a[2].should == subject.main_address_3
-      a[3].should == subject.main_address_4
+      a[0].should be == subject.main_address_1
+      a[1].should be == subject.main_address_2
+      a[2].should be == subject.main_address_3
+      a[3].should be == subject.main_address_4
     end
   end
 
   it "should provide a sanitized version of unit_email property" do
     subject.unit_email = " t.user@uq.edu.au "
-    subject.email.should == "t.user@uq.edu.au"
+    subject.email.should be == "t.user@uq.edu.au"
 
     subject.unit_email = \
       "Executive Assistant <br> Test User <br> t.user@uq.edu.au"
@@ -54,18 +54,18 @@ describe OrgUnit do
 
     doc = Nokogiri::XML(subject.to_rif)
     # Check that the generated document validates
-    schema.validate(doc).should == []
+    schema.validate(doc).should be == []
 
     # Check all the relevant values are in the document
     ns_decl = { 'rif' => 'http://ands.org.au/standards/rif-cs/registryObjects' }
     doc.at_xpath('//rif:key', ns_decl).content.should \
       match(/#{subject.org_unit_id}$/)
-    identifiers = doc.xpath('//rif:identifier', ns_decl).map &:content
+    identifiers = doc.xpath('//rif:identifier', ns_decl).map(&:content)
     identifiers.detect{|i| i =~ /#{subject.org_unit_id}$/}.should_not be_nil
     identifiers.should include(subject.unit_url)
-    doc.at_xpath('//rif:party', ns_decl)['type'].should == 'group'
+    doc.at_xpath('//rif:party', ns_decl)['type'].should be == 'group'
     doc.at_xpath('//rif:name/rif:namePart', ns_decl).content.should \
-      == "Office of the Pro-Vice-Chancellor"
+      be == "Office of the Pro-Vice-Chancellor"
     streetAddress = doc.at_xpath(
       '//rif:location/rif:address/rif:physical[@type="streetAddress"]',
       ns_decl)
@@ -75,16 +75,16 @@ describe OrgUnit do
     end
     streetAddress.at_xpath(
       'rif:addressPart[@type="telephoneNumber"]',
-      ns_decl).content.should == subject.unit_phone
+      ns_decl).content.should be == subject.unit_phone
     streetAddress.at_xpath(
       'rif:addressPart[@type="faxNumber"]',
-      ns_decl).content.should == subject.unit_fax
+      ns_decl).content.should be == subject.unit_fax
     doc.at_xpath(
       '//rif:location/rif:address/rif:electronic[@type="email"]/rif:value',
-      ns_decl).content.should == subject.email
+      ns_decl).content.should be == subject.email
     doc.at_xpath(
       '//rif:relatedObject[rif:relation/@type="isPartOf"]/rif:key',
-      ns_decl).content.should == 'http://example.edu/'
+      ns_decl).content.should be == 'http://example.edu/'
   end
 
 end

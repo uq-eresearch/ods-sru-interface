@@ -17,20 +17,20 @@ describe Grant do
 
       doc = Nokogiri::XML(subject.to_rif)
       # Check that the generated document validates
-      schema.validate(doc).should == []
+      schema.validate(doc).should be == []
 
       # Check all the relevant values are in the document
       ns_decl = {'rif' => 'http://ands.org.au/standards/rif-cs/registryObjects'}
       unpadded_project_code = subject.rm_project_code.gsub(/^0+/,'')
       doc.at_xpath('//rif:key', ns_decl).content.should \
         match(/#{unpadded_project_code}$/)
-      doc.at_xpath('//rif:activity', ns_decl)['type'].should == 'project'
+      doc.at_xpath('//rif:activity', ns_decl)['type'].should be == 'project'
       doc.at_xpath('//rif:identifier', ns_decl).content.should \
         match(/#{unpadded_project_code}$/)
       doc.xpath('//rif:identifier', ns_decl).map{|n| n.content}.should \
-        == ["uq-grant-code:%d" % subject.rm_project_code.to_i,
-            "http://purl.org/au-research/grants/arc/%s" %
-            subject.grantor_reference]
+        be == ["uq-grant-code:%d" % subject.rm_project_code.to_i,
+               "http://purl.org/au-research/grants/arc/%s" %
+               subject.grantor_reference]
       doc.at_xpath('//rif:name/rif:namePart', ns_decl).content.should \
         == subject.project_title
     end
