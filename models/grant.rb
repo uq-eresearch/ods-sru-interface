@@ -62,6 +62,7 @@ class Grant < ActiveRecord::Base
               xml.identifier(@grant.identifier, :type => 'AU-QU-local')
               grantor_identifier(xml)
               name(xml)
+              existence_dates(xml)
               related_objects(xml)
             }
           }
@@ -82,6 +83,21 @@ class Grant < ActiveRecord::Base
     def name(xml)
       xml.name(:type => 'primary') {
         xml.namePart @grant.project_title
+      }
+    end
+
+    def existence_dates(xml)
+      existence = {
+        :startDate => @grant.project_start_date,
+        :endDate => @grant.project_end_date
+      }
+      return if existence.values.all?(&:nil?)
+      xml.existenceDates {
+        existence.each do |elementName, value|
+          next if value.nil?
+          xml.send elementName, value.strftime('%Y-%m-%d'),
+            :dateFormat => 'W3CDTF'
+        end
       }
     end
 
