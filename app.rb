@@ -59,3 +59,19 @@ __END__
 %p
   You're probably looking for the
   %a{:href => '/sru'} SRU Interface.
+
+%form{:action => 'sru', :method => 'GET'}
+  %fieldset
+    %legend SRU Quick Search
+    %input{:type => 'hidden', :name => 'version', :value => '1.2'}
+    %input{:type => 'hidden', :name => 'operation', :value => 'searchRetrieve'}
+    %input{:name => 'query', :placeholder => 'dc.title="My Title"'}
+    %select{:name => 'maximumRecords'}
+      %option 2
+      %option 10
+      %option 100
+      %option 1000
+    %button{:type => 'submit'}
+      Search
+
+
