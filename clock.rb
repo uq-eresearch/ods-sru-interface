@@ -24,7 +24,10 @@ module Clockwork
     IdZebra::API('config/zebra/zebra.cfg') do |repo|
       repo.transaction do
         if use_bulk and model.respond_to?(:to_rif)
-          repo.add_record(model.to_rif)
+          puts "Building RIF-CS data for #{model}"
+          data = model.to_rif
+          puts "Adding data to repository for #{model}"
+          repo.add_record(data)
         else
           # While much slower than generating a single document, the
           # memory requirements can be less troublesome for a small VM.
@@ -38,8 +41,8 @@ module Clockwork
     end
   end
 
-  every(6.hours, 'output.orgunits') do
-    [OrgUnit, StaffPerson, Grant].each {|m| update_sru_records(m, true)}
+  every(6.hours, 'output.records') do
+    [OrgUnit, Grant, StaffPerson].each {|m| update_sru_records(m, true)}
   end
 
 end
