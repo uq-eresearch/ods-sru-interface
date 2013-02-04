@@ -30,8 +30,8 @@ describe OrgUnit do
   end
 
   it "should output RIF-CS with :to_rif" do
-    ENV['UNIVERSITY_NAME'] = 'The University of Woolloomooloo'
-    ENV['UNIVERSITY_URI_IDENTIFIER'] = 'http://example.edu/'
+    University.stub(:name) { 'The University of Woolloomooloo' }
+    University.stub(:uri) { 'http://example.edu/' }
 
     subject.unit_prefix = "Centre for"
     subject.unit_name = "Philosophical Studies"

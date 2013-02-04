@@ -57,8 +57,6 @@ class OrgUnit < ActiveRecord::Base
                                             .compact.join(' ')
   end
 
-  class University < Struct.new(:name, :uri); end
-
   class RifCsRepresentation
 
     def initialize(org_unit)
@@ -98,7 +96,7 @@ class OrgUnit < ActiveRecord::Base
     end
 
     def group
-      university.name
+      University.name
     end
 
     def alt_identifiers(xml)
@@ -107,7 +105,7 @@ class OrgUnit < ActiveRecord::Base
 
     def name(xml)
       xml.name(:type => 'primary') {
-        xml.namePart "#{university.name} #{@org_unit.name}"
+        xml.namePart "#{University.name} #{@org_unit.name}"
       }
       xml.name(:type => 'alternative') {
         xml.namePart @org_unit.name
@@ -168,16 +166,9 @@ class OrgUnit < ActiveRecord::Base
 
     def parent_relation(xml)
       xml.relatedObject {
-        xml.key(university.uri)
+        xml.key(University.uri)
         xml.relation(:type => 'isPartOf')
       }
-    end
-
-    def university
-      @@university ||= University.new(
-        ENV['UNIVERSITY_NAME'] || 'The University of Queensland',
-        ENV['UNIVERSITY_URI_IDENTIFIER'] || 'http://uq.edu.au/'
-      )
     end
 
   end

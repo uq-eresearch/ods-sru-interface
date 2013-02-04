@@ -29,6 +29,8 @@ describe StaffPerson do
       doc.at_xpath('//rif:party', ns_decl)['type'].should be == 'person'
       doc.at_xpath('//rif:identifier', ns_decl).content.should \
         be == subject.anonymous_identifier.to_s
+      doc.at_xpath('//rif:description', ns_decl).should_not be_nil
+      doc.at_xpath('//rif:description', ns_decl).content.should_not eq('')
       primary_name = doc.at_xpath('//rif:name[@type="primary"]', ns_decl)
       primary_name.at_xpath('rif:namePart[@type="family"]', ns_decl)\
         .content.should be == "Atkins"

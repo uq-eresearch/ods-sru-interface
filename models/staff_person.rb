@@ -80,6 +80,7 @@ class StaffPerson < ActiveRecord::Base
               alternate_identifiers(xml)
               primary_name(xml)
               alt_name(xml)
+              description(xml)
               email(xml)
               related_objects(xml)
             }
@@ -93,7 +94,7 @@ class StaffPerson < ActiveRecord::Base
     end
 
     def group
-      'The University of Queensland ODS'
+      University.name
     end
 
     def e(xml, e_name, type, value)
@@ -124,6 +125,12 @@ class StaffPerson < ActiveRecord::Base
       @person.alt_ids.each do |alt|
         xml.identifier(alt, :type => 'uri')
       end
+    end
+
+    def description(xml)
+      xml.description("%s %s is a staff member at %s." %
+          [@person.preferred_name, @person.family_name, University.name],
+          :type => 'brief')
     end
 
     def email_identifier(xml)

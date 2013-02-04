@@ -77,7 +77,7 @@ class Grant < ActiveRecord::Base
     end
 
     def group
-      'The University of Queensland ODS'
+      University.name
     end
 
     def name(xml)
