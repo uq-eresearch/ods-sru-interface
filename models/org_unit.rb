@@ -52,6 +52,13 @@ class OrgUnit < ActiveRecord::Base
     end
   end
 
+  def name
+    [:unit_prefix, :unit_name, :unit_suffix].map {|m| self.send(m)}
+                                            .compact.join(' ')
+  end
+
+  class University < Struct.new(:name, :uri); end
+
   class RifCsRepresentation
 
     def initialize(org_unit)
@@ -91,7 +98,7 @@ class OrgUnit < ActiveRecord::Base
     end
 
     def group
-      'The University of Queensland ODS'
+      university.name
     end
 
     def alt_identifiers(xml)
@@ -100,10 +107,10 @@ class OrgUnit < ActiveRecord::Base
 
     def name(xml)
       xml.name(:type => 'primary') {
-        xml.namePart [
-          @org_unit.unit_prefix,
-          @org_unit.unit_name,
-          @org_unit.unit_suffix].compact.join(' ')
+        xml.namePart "#{university.name} #{@org_unit.name}"
+      }
+      xml.name(:type => 'alternative') {
+        xml.namePart @org_unit.name
       }
     end
 
@@ -161,13 +168,16 @@ class OrgUnit < ActiveRecord::Base
 
     def parent_relation(xml)
       xml.relatedObject {
-        xml.key(university_uri_identifier)
+        xml.key(university.uri)
         xml.relation(:type => 'isPartOf')
       }
     end
 
-    def university_uri_identifier
-      ENV['UNIVERSITY_URI_IDENTIFIER'] || 'http://uq.edu.au/'
+    def university
+      @@university ||= University.new(
+        ENV['UNIVERSITY_NAME'] || 'The University of Queensland',
+        ENV['UNIVERSITY_URI_IDENTIFIER'] || 'http://uq.edu.au/'
+      )
     end
 
   end

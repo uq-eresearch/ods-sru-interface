@@ -30,10 +30,11 @@ describe OrgUnit do
   end
 
   it "should output RIF-CS with :to_rif" do
+    ENV['UNIVERSITY_NAME'] = 'The University of Woolloomooloo'
     ENV['UNIVERSITY_URI_IDENTIFIER'] = 'http://example.edu/'
 
-    subject.unit_prefix = "Office of the"
-    subject.unit_name = "Pro-Vice-Chancellor"
+    subject.unit_prefix = "Centre for"
+    subject.unit_name = "Philosophical Studies"
     subject.unit_suffix = nil
     subject.unit_phone = "+61 (7) 9999 9999"
     subject.unit_fax = "+61 (7) 9999 9998"
@@ -41,8 +42,8 @@ describe OrgUnit do
     subject.org_unit_id = 15
     subject.main_address_1 = "Room 304, Level 3"
     subject.main_address_2 = "Building No. 8"
-    subject.main_address_3 = "Ipswich Campus"
-    subject.main_address_4 = "11 Salisbury Road, Ipswich, Qld, 4305"
+    subject.main_address_3 = "Main Campus"
+    subject.main_address_4 = "4 Python Road, Woolloomooloo, QLD, 4999"
     subject.unit_email = \
       "Executive Assistant <br> Test User <br> t.user@uq.edu.au"
 
@@ -65,7 +66,7 @@ describe OrgUnit do
     identifiers.should include(subject.unit_url)
     doc.at_xpath('//rif:party', ns_decl)['type'].should be == 'group'
     doc.at_xpath('//rif:name/rif:namePart', ns_decl).content.should \
-      be == "Office of the Pro-Vice-Chancellor"
+      be == 'The University of Woolloomooloo Centre for Philosophical Studies'
     streetAddress = doc.at_xpath(
       '//rif:location/rif:address/rif:physical[@type="streetAddress"]',
       ns_decl)
