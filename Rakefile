@@ -1,5 +1,5 @@
 #!/usr/bin/env rake
-
+require 'bundler'
 Bundler.setup
 
 # Include rake task files
