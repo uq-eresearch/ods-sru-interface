@@ -4,6 +4,11 @@ describe OrgUnit do
 
   subject { OrgUnit.new }
 
+  before(:each) do
+    University.stub(:name) { 'The University of Woolloomooloo' }
+    University.stub(:uri) { 'http://example.edu/' }
+  end
+
   it { should respond_to(:staff) }
 
   it "should provide all the address lines as a single property" do
@@ -30,9 +35,6 @@ describe OrgUnit do
   end
 
   it "should output RIF-CS with :to_rif" do
-    University.stub(:name) { 'The University of Woolloomooloo' }
-    University.stub(:uri) { 'http://example.edu/' }
-
     subject.unit_prefix = "Centre for"
     subject.unit_name = "Philosophical Studies"
     subject.unit_suffix = nil
@@ -63,7 +65,8 @@ describe OrgUnit do
       match(/#{subject.org_unit_id}$/)
     identifiers = doc.xpath('//rif:identifier', ns_decl).map(&:content)
     identifiers.detect{|i| i =~ /#{subject.org_unit_id}$/}.should_not be_nil
-    identifiers.should include(subject.unit_url)
+    # This would be unsafe to do (but previously was implemented)
+    identifiers.should_not include(subject.unit_url)
     doc.at_xpath('//rif:party', ns_decl)['type'].should be == 'group'
     doc.at_xpath('//rif:name/rif:namePart', ns_decl).content.should \
       be == 'The University of Woolloomooloo Centre for Philosophical Studies'

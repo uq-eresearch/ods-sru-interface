@@ -81,7 +81,6 @@ class OrgUnit < ActiveRecord::Base
             xml.originatingSource group
             xml.party(:type => 'group') {
               xml.identifier(@org_unit.identifier, :type => 'AU-QU-local')
-              alt_identifiers(xml)
               name(xml)
               location(xml)
               parent_relation(xml)
@@ -97,10 +96,6 @@ class OrgUnit < ActiveRecord::Base
 
     def group
       University.name
-    end
-
-    def alt_identifiers(xml)
-      xml.identifier(@org_unit.unit_url, :type => 'uri') if @org_unit.unit_url
     end
 
     def name(xml)
